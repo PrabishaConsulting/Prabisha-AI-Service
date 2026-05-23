@@ -1,0 +1,262 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================================
+// ENUMS
+// =============================================================
+
+enum ProviderName {
+  OPENAI
+  ANTHROPIC
+  GEMINI
+  MISTRAL
+  COHERE
+}
+
+enum ProviderStatus {
+  ACTIVE
+  INACTIVE
+  RATE_LIMITED
+  ERROR
+}
+
+enum ApiKeyStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum ApiKeyScope {
+  CHAT
+  IMAGE
+  VIDEO
+  EMBEDDINGS
+  ALL
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum RequestStatus {
+  SUCCESS
+  FAILED
+  FALLBACK_USED
+  CACHED
+}
+
+enum Modality {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  EMBEDDING
+}
+
+// =============================================================
+// USER
+// =============================================================
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique @db.VarChar(255)
+  name      String?  @db.VarChar(255)
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  apiKeys   ApiKey[]
+  usageLogs UsageLog[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+// =============================================================
+// PROVIDER  (admin-seeded, holds encrypted provider API keys)
+// =============================================================
+
+model Provider {
+  id             String         @id @default(uuid()) @db.Uuid
+  name           ProviderName   @unique
+  displayName    String         @db.VarChar(100)
+  encryptedKey   String         @db.Text        // AES-256-GCM encrypted
+  keyIv          String         @db.VarChar(64) // Initialisation vector
+  keyTag         String         @db.VarChar(64) // Auth tag for GCM
+  baseUrl        String?        @db.VarChar(500) // Override default SDK base URL
+  status         ProviderStatus @default(ACTIVE)
+  priority       Int            @default(0)      // Lower = tried first in fallback chain
+  isEnabled      Boolean        @default(true)
+
+  // Per-provider rate limit tracking
+  requestsThisMinute Int      @default(0)
+  requestsThisDay    Int      @default(0)
+  lastResetAt        DateTime @default(now())
+
+  // Supported capabilities
+  supportedModalities Modality[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  models    ProviderModel[]
+  usageLogs UsageLog[]
+
+  @@index([status, isEnabled])
+  @@index([priority])
+  @@map("providers")
+}
+
+// =============================================================
+// PROVIDER MODEL  (individual models per provider)
+// =============================================================
+
+model ProviderModel {
+  id          String       @id @default(uuid()) @db.Uuid
+  providerId  String       @db.Uuid
+  modelId     String       @db.VarChar(150)  // e.g. "gpt-4o", "claude-sonnet-4-5"
+  displayName String       @db.VarChar(150)
+  modality    Modality
+  isDefault   Boolean      @default(false)
+  isEnabled   Boolean      @default(true)
+
+  // Pricing (per 1K tokens, in USD — stored as float for simplicity)
+  inputPricePer1k  Float @default(0)
+  outputPricePer1k Float @default(0)
+
+  // Context / output limits
+  contextWindow Int?
+  maxOutputTokens Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  provider  Provider   @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  usageLogs UsageLog[]
+
+  @@unique([providerId, modelId])
+  @@index([providerId, modality])
+  @@map("provider_models")
+}
+
+// =============================================================
+// API KEY  (user-facing keys, hashed before storage)
+// =============================================================
+
+model ApiKey {
+  id          String       @id @default(uuid()) @db.Uuid
+  userId      String       @db.Uuid
+  keyHash     String       @unique @db.VarChar(255) // bcrypt hash of the raw key
+  keyPrefix   String       @db.VarChar(12)           // e.g. "sk-live-xxxx" shown in UI
+  name        String       @db.VarChar(100)           // user-defined label
+  status      ApiKeyStatus @default(ACTIVE)
+  scopes      ApiKeyScope[]
+
+  // Rate limit overrides (null = use global default)
+  rpmLimit    Int?   // requests per minute
+  rpdLimit    Int?   // requests per day
+  monthlyTokenLimit BigInt?
+
+  // Tracking
+  lastUsedAt  DateTime?
+  usageCount  Int      @default(0)
+  expiresAt   DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  revokedAt   DateTime?
+
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usageLogs   UsageLog[]
+
+  @@index([keyHash])
+  @@index([userId, status])
+  @@index([status, expiresAt])
+  @@map("api_keys")
+}
+
+// =============================================================
+// USAGE LOG  (one row per inference request)
+// =============================================================
+
+model UsageLog {
+  id              String        @id @default(uuid()) @db.Uuid
+  userId          String        @db.Uuid
+  apiKeyId        String        @db.Uuid
+  providerId      String        @db.Uuid
+  providerModelId String        @db.Uuid
+  modality        Modality
+  status          RequestStatus
+
+  // Token counts (null for image / video)
+  promptTokens    Int?
+  completionTokens Int?
+  totalTokens     Int?
+  embeddingDimensions Int?
+
+  // Cost estimate in USD (computed at write time)
+  estimatedCostUsd Float @default(0)
+
+  // Latency
+  latencyMs       Int
+
+  // Request metadata
+  requestId       String   @unique @db.VarChar(100) // correlation ID
+  endpointPath    String   @db.VarChar(100)         // e.g. "/api/chat"
+  isCached        Boolean  @default(false)
+  fallbackUsed    Boolean  @default(false)
+  fallbackChain   String[] // provider names tried before success
+  errorMessage    String?  @db.Text
+  ipAddress       String?  @db.VarChar(45)          // IPv4 or IPv6
+
+  createdAt       DateTime @default(now())
+
+  user          User          @relation(fields: [userId], references: [id])
+  apiKey        ApiKey        @relation(fields: [apiKeyId], references: [id])
+  provider      Provider      @relation(fields: [providerId], references: [id])
+  providerModel ProviderModel @relation(fields: [providerModelId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([apiKeyId, createdAt])
+  @@index([providerId, createdAt])
+  @@index([modality, status])
+  @@index([requestId])
+  @@index([createdAt])
+  @@map("usage_logs")
+}
+
+// =============================================================
+// RATE LIMIT BUCKET  (sliding window state per api key)
+// Stored here as a fallback audit trail; primary enforcement is in Redis
+// =============================================================
+
+model RateLimitBucket {
+  id          String   @id @default(uuid()) @db.Uuid
+  apiKeyId    String   @unique @db.Uuid
+  minuteCount Int      @default(0)
+  dayCount    Int      @default(0)
+  minuteResetsAt DateTime
+  dayResetsAt    DateTime
+
+  updatedAt DateTime @updatedAt
+
+  @@index([apiKeyId])
+  @@map("rate_limit_buckets")
+}
