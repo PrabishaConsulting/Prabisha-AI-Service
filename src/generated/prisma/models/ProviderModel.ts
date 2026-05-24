@@ -279,8 +279,8 @@ export type ProviderModelWhereInput = {
   AND?: Prisma.ProviderModelWhereInput | Prisma.ProviderModelWhereInput[]
   OR?: Prisma.ProviderModelWhereInput[]
   NOT?: Prisma.ProviderModelWhereInput | Prisma.ProviderModelWhereInput[]
-  id?: Prisma.UuidFilter<"ProviderModel"> | string
-  providerId?: Prisma.UuidFilter<"ProviderModel"> | string
+  id?: Prisma.StringFilter<"ProviderModel"> | string
+  providerId?: Prisma.StringFilter<"ProviderModel"> | string
   modelId?: Prisma.StringFilter<"ProviderModel"> | string
   displayName?: Prisma.StringFilter<"ProviderModel"> | string
   modality?: Prisma.EnumModalityFilter<"ProviderModel"> | $Enums.Modality
@@ -320,7 +320,7 @@ export type ProviderModelWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ProviderModelWhereInput | Prisma.ProviderModelWhereInput[]
   OR?: Prisma.ProviderModelWhereInput[]
   NOT?: Prisma.ProviderModelWhereInput | Prisma.ProviderModelWhereInput[]
-  providerId?: Prisma.UuidFilter<"ProviderModel"> | string
+  providerId?: Prisma.StringFilter<"ProviderModel"> | string
   modelId?: Prisma.StringFilter<"ProviderModel"> | string
   displayName?: Prisma.StringFilter<"ProviderModel"> | string
   modality?: Prisma.EnumModalityFilter<"ProviderModel"> | $Enums.Modality
@@ -361,8 +361,8 @@ export type ProviderModelScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProviderModelScalarWhereWithAggregatesInput | Prisma.ProviderModelScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProviderModelScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProviderModelScalarWhereWithAggregatesInput | Prisma.ProviderModelScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"ProviderModel"> | string
-  providerId?: Prisma.UuidWithAggregatesFilter<"ProviderModel"> | string
+  id?: Prisma.StringWithAggregatesFilter<"ProviderModel"> | string
+  providerId?: Prisma.StringWithAggregatesFilter<"ProviderModel"> | string
   modelId?: Prisma.StringWithAggregatesFilter<"ProviderModel"> | string
   displayName?: Prisma.StringWithAggregatesFilter<"ProviderModel"> | string
   modality?: Prisma.EnumModalityWithAggregatesFilter<"ProviderModel"> | $Enums.Modality
@@ -711,8 +711,8 @@ export type ProviderModelScalarWhereInput = {
   AND?: Prisma.ProviderModelScalarWhereInput | Prisma.ProviderModelScalarWhereInput[]
   OR?: Prisma.ProviderModelScalarWhereInput[]
   NOT?: Prisma.ProviderModelScalarWhereInput | Prisma.ProviderModelScalarWhereInput[]
-  id?: Prisma.UuidFilter<"ProviderModel"> | string
-  providerId?: Prisma.UuidFilter<"ProviderModel"> | string
+  id?: Prisma.StringFilter<"ProviderModel"> | string
+  providerId?: Prisma.StringFilter<"ProviderModel"> | string
   modelId?: Prisma.StringFilter<"ProviderModel"> | string
   displayName?: Prisma.StringFilter<"ProviderModel"> | string
   modality?: Prisma.EnumModalityFilter<"ProviderModel"> | $Enums.Modality

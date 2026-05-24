@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { DocsService } from './docs.service';
-import { CreateDocDto } from './dto/create-doc.dto';
-import { UpdateDocDto } from './dto/update-doc.dto';
+// src/modules/docs/docs.controller.ts
+import { Controller, Get, Render } from '@nestjs/common';
 
 @Controller('docs')
 export class DocsController {
-  constructor(private readonly docsService: DocsService) {}
-
-  @Post()
-  create(@Body() createDocDto: CreateDocDto) {
-    return this.docsService.create(createDocDto);
-  }
-
+  
   @Get()
-  findAll() {
-    return this.docsService.findAll();
+  @Render('docs/index')
+  async getDocs() {
+    return {
+      title: 'AI Gateway API Documentation',
+      layout: 'layouts/docs', // Use a public layout without auth
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.docsService.findOne(+id);
+  @Get('authentication')
+  @Render('docs/auth')
+  async getAuthentication() {
+    return {
+      title: 'Authentication - API Docs',
+      layout: 'layouts/docs',
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDocDto: UpdateDocDto) {
-    return this.docsService.update(+id, updateDocDto);
+  @Get('chat')
+  @Render('docs/chat')
+  async getChat() {
+    return {
+      title: 'Chat API - Documentation',
+      layout: 'layouts/docs',
+    };
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.docsService.remove(+id);
+  @Get('image')
+  @Render('docs/image')
+  async getImage() {
+    return {
+      title: 'Image Generation API - Documentation',
+      layout: 'layouts/docs',
+    };
+  }
+
+  @Get('embeddings')
+  @Render('docs/embeddings')
+  async getEmbeddings() {
+    return {
+      title: 'Embeddings API - Documentation',
+      layout: 'layouts/docs',
+    };
+  }
+
+  @Get('rate-limits')
+  @Render('docs/rate-limits')
+  async getRateLimits() {
+    return {
+      title: 'Rate Limits - API Documentation',
+      layout: 'layouts/docs',
+    };
   }
 }

@@ -296,8 +296,8 @@ export type ApiKeyWhereInput = {
   AND?: Prisma.ApiKeyWhereInput | Prisma.ApiKeyWhereInput[]
   OR?: Prisma.ApiKeyWhereInput[]
   NOT?: Prisma.ApiKeyWhereInput | Prisma.ApiKeyWhereInput[]
-  id?: Prisma.UuidFilter<"ApiKey"> | string
-  userId?: Prisma.UuidFilter<"ApiKey"> | string
+  id?: Prisma.StringFilter<"ApiKey"> | string
+  userId?: Prisma.StringFilter<"ApiKey"> | string
   keyHash?: Prisma.StringFilter<"ApiKey"> | string
   keyPrefix?: Prisma.StringFilter<"ApiKey"> | string
   name?: Prisma.StringFilter<"ApiKey"> | string
@@ -343,7 +343,7 @@ export type ApiKeyWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ApiKeyWhereInput | Prisma.ApiKeyWhereInput[]
   OR?: Prisma.ApiKeyWhereInput[]
   NOT?: Prisma.ApiKeyWhereInput | Prisma.ApiKeyWhereInput[]
-  userId?: Prisma.UuidFilter<"ApiKey"> | string
+  userId?: Prisma.StringFilter<"ApiKey"> | string
   keyPrefix?: Prisma.StringFilter<"ApiKey"> | string
   name?: Prisma.StringFilter<"ApiKey"> | string
   status?: Prisma.EnumApiKeyStatusFilter<"ApiKey"> | $Enums.ApiKeyStatus
@@ -389,8 +389,8 @@ export type ApiKeyScalarWhereWithAggregatesInput = {
   AND?: Prisma.ApiKeyScalarWhereWithAggregatesInput | Prisma.ApiKeyScalarWhereWithAggregatesInput[]
   OR?: Prisma.ApiKeyScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ApiKeyScalarWhereWithAggregatesInput | Prisma.ApiKeyScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"ApiKey"> | string
-  userId?: Prisma.UuidWithAggregatesFilter<"ApiKey"> | string
+  id?: Prisma.StringWithAggregatesFilter<"ApiKey"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"ApiKey"> | string
   keyHash?: Prisma.StringWithAggregatesFilter<"ApiKey"> | string
   keyPrefix?: Prisma.StringWithAggregatesFilter<"ApiKey"> | string
   name?: Prisma.StringWithAggregatesFilter<"ApiKey"> | string
@@ -780,8 +780,8 @@ export type ApiKeyScalarWhereInput = {
   AND?: Prisma.ApiKeyScalarWhereInput | Prisma.ApiKeyScalarWhereInput[]
   OR?: Prisma.ApiKeyScalarWhereInput[]
   NOT?: Prisma.ApiKeyScalarWhereInput | Prisma.ApiKeyScalarWhereInput[]
-  id?: Prisma.UuidFilter<"ApiKey"> | string
-  userId?: Prisma.UuidFilter<"ApiKey"> | string
+  id?: Prisma.StringFilter<"ApiKey"> | string
+  userId?: Prisma.StringFilter<"ApiKey"> | string
   keyHash?: Prisma.StringFilter<"ApiKey"> | string
   keyPrefix?: Prisma.StringFilter<"ApiKey"> | string
   name?: Prisma.StringFilter<"ApiKey"> | string

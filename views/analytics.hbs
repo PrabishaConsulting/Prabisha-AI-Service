@@ -1,0 +1,83 @@
+<div class="space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Analytics</h2>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card p-6">
+            <h3 class="text-lg font-semibold mb-4">30-Day Usage Trend</h3>
+            <canvas id="trendChart" height="300"></canvas>
+        </div>
+        
+        <div class="card p-6">
+            <h3 class="text-lg font-semibold mb-4">Provider Usage Distribution</h3>
+            <canvas id="distChart" height="300"></canvas>
+        </div>
+    </div>
+    
+    <div class="card p-6">
+        <h3 class="text-lg font-semibold mb-4">Top Users by Usage</h3>
+        <div class="table-container">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Calls</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Tokens</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estimated Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="topUsersTable">
+                    <!-- Filled by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load analytics data
+fetch('/admin/api/analytics/stats')
+    .then(res => res.json())
+    .then(data => {
+        // Trend Chart
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: data.dailyLabels,
+                datasets: [{
+                    label: 'Requests',
+                    data: data.dailyCounts,
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: true }
+        });
+        
+        // Distribution Chart
+        new Chart(document.getElementById('distChart'), {
+            type: 'doughnut',
+            data: {
+                labels: data.providerLabels,
+                datasets: [{
+                    data: data.providerCounts,
+                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6']
+                }]
+            }
+        });
+        
+        // Top Users Table
+        const tbody = document.getElementById('topUsersTable');
+        data.topUsers.forEach(user => {
+            tbody.innerHTML += `
+                <tr>
+                    <td class="px-6 py-4">${user.email}</td>
+                    <td class="px-6 py-4">${user.totalCalls}</td>
+                    <td class="px-6 py-4">${user.totalTokens}</td>
+                    <td class="px-6 py-4">$${user.totalCost.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+    });
+</script>

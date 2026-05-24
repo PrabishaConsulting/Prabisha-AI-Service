@@ -1,0 +1,90 @@
+<!-- views/docs/authentication.hbs -->
+<div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Authentication</h1>
+    
+    <p class="text-gray-600 mb-6">
+        The AI Gateway API uses API keys to authenticate requests. You can obtain your API key from the developer portal after logging in.
+    </p>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Getting Your API Key</h2>
+    <div class="space-y-4">
+        <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-purple-600 font-bold">1</span>
+            </div>
+            <div>
+                <p class="text-gray-700">Log in to the <a href="/auth/login" class="text-purple-600 hover:underline">Developer Portal</a></p>
+            </div>
+        </div>
+        <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-purple-600 font-bold">2</span>
+            </div>
+            <div>
+                <p class="text-gray-700">Navigate to "API Keys" section</p>
+            </div>
+        </div>
+        <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-purple-600 font-bold">3</span>
+            </div>
+            <div>
+                <p class="text-gray-700">Click "Create API Key" and give it a name</p>
+            </div>
+        </div>
+        <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="text-purple-600 font-bold">4</span>
+            </div>
+            <div>
+                <p class="text-gray-700">Copy your API key immediately (it won't be shown again!)</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Using Your API Key</h2>
+    <p class="text-gray-600 mb-3">Include your API key in all API requests using the <code class="bg-gray-100 px-2 py-1 rounded">X-API-Key</code> header:</p>
+    
+    <pre><code class="language-bash">curl -X POST https://api.yourdomain.com/api/chat \
+  -H "X-API-Key: your-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'</code></pre>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+        <p class="text-yellow-800 text-sm">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <strong>Security Note:</strong> Never share your API key publicly or expose it in client-side code. Always keep it secure on your backend servers.
+        </p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">API Key Scopes</h2>
+    <p class="text-gray-600 mb-3">Each API key can be configured with specific scopes to limit access:</p>
+    <table class="min-w-full border-collapse border border-gray-200 mb-6">
+        <thead>
+            <tr class="bg-gray-50">
+                <th class="border border-gray-200 px-4 py-2 text-left">Scope</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">CHAT</code></td>
+                <td class="border border-gray-200 px-4 py-2">Access to chat completion endpoints</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">IMAGE</code></td>
+                <td class="border border-gray-200 px-4 py-2">Access to image generation endpoints</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">VIDEO</code></td>
+                <td class="border border-gray-200 px-4 py-2">Access to video generation endpoints</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">EMBEDDINGS</code></td>
+                <td class="border border-gray-200 px-4 py-2">Access to embeddings endpoints</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

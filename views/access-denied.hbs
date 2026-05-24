@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-red-600 to-purple-600 min-h-screen">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 text-center">
+                <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-4xl text-red-600"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Access Denied</h1>
+                <p class="text-gray-600 mb-6">You don't have administrator access to this portal.</p>
+                <a href="/auth/logout" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                    Back to Login
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

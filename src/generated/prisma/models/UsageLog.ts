@@ -339,11 +339,11 @@ export type UsageLogWhereInput = {
   AND?: Prisma.UsageLogWhereInput | Prisma.UsageLogWhereInput[]
   OR?: Prisma.UsageLogWhereInput[]
   NOT?: Prisma.UsageLogWhereInput | Prisma.UsageLogWhereInput[]
-  id?: Prisma.UuidFilter<"UsageLog"> | string
-  userId?: Prisma.UuidFilter<"UsageLog"> | string
-  apiKeyId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerModelId?: Prisma.UuidFilter<"UsageLog"> | string
+  id?: Prisma.StringFilter<"UsageLog"> | string
+  userId?: Prisma.StringFilter<"UsageLog"> | string
+  apiKeyId?: Prisma.StringFilter<"UsageLog"> | string
+  providerId?: Prisma.StringFilter<"UsageLog"> | string
+  providerModelId?: Prisma.StringFilter<"UsageLog"> | string
   modality?: Prisma.EnumModalityFilter<"UsageLog"> | $Enums.Modality
   status?: Prisma.EnumRequestStatusFilter<"UsageLog"> | $Enums.RequestStatus
   promptTokens?: Prisma.IntNullableFilter<"UsageLog"> | number | null
@@ -400,10 +400,10 @@ export type UsageLogWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UsageLogWhereInput | Prisma.UsageLogWhereInput[]
   OR?: Prisma.UsageLogWhereInput[]
   NOT?: Prisma.UsageLogWhereInput | Prisma.UsageLogWhereInput[]
-  userId?: Prisma.UuidFilter<"UsageLog"> | string
-  apiKeyId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerModelId?: Prisma.UuidFilter<"UsageLog"> | string
+  userId?: Prisma.StringFilter<"UsageLog"> | string
+  apiKeyId?: Prisma.StringFilter<"UsageLog"> | string
+  providerId?: Prisma.StringFilter<"UsageLog"> | string
+  providerModelId?: Prisma.StringFilter<"UsageLog"> | string
   modality?: Prisma.EnumModalityFilter<"UsageLog"> | $Enums.Modality
   status?: Prisma.EnumRequestStatusFilter<"UsageLog"> | $Enums.RequestStatus
   promptTokens?: Prisma.IntNullableFilter<"UsageLog"> | number | null
@@ -458,11 +458,11 @@ export type UsageLogScalarWhereWithAggregatesInput = {
   AND?: Prisma.UsageLogScalarWhereWithAggregatesInput | Prisma.UsageLogScalarWhereWithAggregatesInput[]
   OR?: Prisma.UsageLogScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UsageLogScalarWhereWithAggregatesInput | Prisma.UsageLogScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"UsageLog"> | string
-  userId?: Prisma.UuidWithAggregatesFilter<"UsageLog"> | string
-  apiKeyId?: Prisma.UuidWithAggregatesFilter<"UsageLog"> | string
-  providerId?: Prisma.UuidWithAggregatesFilter<"UsageLog"> | string
-  providerModelId?: Prisma.UuidWithAggregatesFilter<"UsageLog"> | string
+  id?: Prisma.StringWithAggregatesFilter<"UsageLog"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"UsageLog"> | string
+  apiKeyId?: Prisma.StringWithAggregatesFilter<"UsageLog"> | string
+  providerId?: Prisma.StringWithAggregatesFilter<"UsageLog"> | string
+  providerModelId?: Prisma.StringWithAggregatesFilter<"UsageLog"> | string
   modality?: Prisma.EnumModalityWithAggregatesFilter<"UsageLog"> | $Enums.Modality
   status?: Prisma.EnumRequestStatusWithAggregatesFilter<"UsageLog"> | $Enums.RequestStatus
   promptTokens?: Prisma.IntNullableWithAggregatesFilter<"UsageLog"> | number | null
@@ -1008,11 +1008,11 @@ export type UsageLogScalarWhereInput = {
   AND?: Prisma.UsageLogScalarWhereInput | Prisma.UsageLogScalarWhereInput[]
   OR?: Prisma.UsageLogScalarWhereInput[]
   NOT?: Prisma.UsageLogScalarWhereInput | Prisma.UsageLogScalarWhereInput[]
-  id?: Prisma.UuidFilter<"UsageLog"> | string
-  userId?: Prisma.UuidFilter<"UsageLog"> | string
-  apiKeyId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerId?: Prisma.UuidFilter<"UsageLog"> | string
-  providerModelId?: Prisma.UuidFilter<"UsageLog"> | string
+  id?: Prisma.StringFilter<"UsageLog"> | string
+  userId?: Prisma.StringFilter<"UsageLog"> | string
+  apiKeyId?: Prisma.StringFilter<"UsageLog"> | string
+  providerId?: Prisma.StringFilter<"UsageLog"> | string
+  providerModelId?: Prisma.StringFilter<"UsageLog"> | string
   modality?: Prisma.EnumModalityFilter<"UsageLog"> | $Enums.Modality
   status?: Prisma.EnumRequestStatusFilter<"UsageLog"> | $Enums.RequestStatus
   promptTokens?: Prisma.IntNullableFilter<"UsageLog"> | number | null

@@ -1,0 +1,189 @@
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Utility mappings for your template's custom helper classes */
+    .gradient-text {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .gradient-bg {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        transition: all 0.2s ease-in-out;
+    }
+    .btn-primary:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+    }
+    .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 8px -5px rgba(0, 0, 0, 0.04);
+    }
+    .feature-icon {
+        background-color: #f3e8ff;
+    }
+</style>
+
+<div class="min-h-screen bg-white font-sans antialiased text-gray-900">
+    <section class="relative overflow-hidden bg-white">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-100 opacity-50"></div>
+        <div class="container mx-auto px-6 py-20 relative">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+                    Unified API for
+                    <span class="gradient-text">Leading AI Models</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Access OpenAI, Anthropic, Gemini, and Mistral through a single, powerful API. 
+                    Built for developers, designed for scale.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="/auth/register" class="btn-primary text-white px-8 py-3 rounded-lg font-medium text-lg inline-block shadow-md">
+                        Get Started Free
+                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                    <a href="/docs" class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-medium text-lg hover:bg-purple-50 transition-colors duration-200">
+                        View Documentation
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
+                    <div class="text-center p-4">
+                        <div class="text-4xl font-bold gradient-text">4+</div>
+                        <p class="text-gray-600 font-medium mt-2">AI Providers</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-4xl font-bold gradient-text">99.9%</div>
+                        <p class="text-gray-600 font-medium mt-2">Uptime SLA</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-4xl font-bold gradient-text">&lt;100ms</div>
+                        <p class="text-gray-600 font-medium mt-2">Average Latency</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50 border-t border-b border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+                    Why Choose AI Gateway?
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Everything you need to build powerful AI applications
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast & Reliable</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Low latency responses with automatic failover between providers</p>
+                </div>
+                
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Secure by Default</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">API keys encrypted at rest, rate limiting, and request validation</p>
+                </div>
+                
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Usage Analytics</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Real-time tracking of tokens, costs, and performance metrics</p>
+                </div>
+                
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-code text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Easy Integration</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Simple REST API with SDKs for JavaScript, Python, and more</p>
+                </div>
+                
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cost Optimization</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Smart routing to minimize costs while maintaining quality</p>
+                </div>
+                
+                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
+                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-cloud-upload-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Multi-Modal</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm">Support for text, images, video, and embeddings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+                    Supported AI Providers
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Access the world's leading AI models through one API
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
+                    <i class="fab fa-openai text-5xl text-gray-800"></i>
+                    <p class="font-semibold mt-3 text-gray-900">OpenAI</p>
+                    <p class="text-xs text-gray-500 mt-1">GPT-4o, o1</p>
+                </div>
+                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-robot text-5xl text-gray-600"></i>
+                    <p class="font-semibold mt-3 text-gray-900">Anthropic</p>
+                    <p class="text-xs text-gray-500 mt-1">Claude 3.5 Sonnet</p>
+                </div>
+                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
+                    <i class="fab fa-google text-5xl text-blue-600"></i>
+                    <p class="font-semibold mt-3 text-gray-900">Google Gemini</p>
+                    <p class="text-xs text-gray-500 mt-1">Gemini 1.5 Pro</p>
+                </div>
+                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-wind text-5xl text-blue-400"></i>
+                    <p class="font-semibold mt-3 text-gray-900">Mistral AI</p>
+                    <p class="text-xs text-gray-500 mt-1">Mistral Large 2</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+                Ready to get started?
+            </h2>
+            <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Join thousands of developers using AI Gateway to build amazing applications
+            </p>
+            <a href="/auth/register" class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-medium text-lg hover:shadow-xl transition-all duration-200 inline-block transform hover:-translate-y-0.5">
+                Get Your API Key
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+            </a>
+        </div>
+    </section>
+</div>

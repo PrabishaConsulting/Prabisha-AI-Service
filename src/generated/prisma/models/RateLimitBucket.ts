@@ -229,8 +229,8 @@ export type RateLimitBucketWhereInput = {
   AND?: Prisma.RateLimitBucketWhereInput | Prisma.RateLimitBucketWhereInput[]
   OR?: Prisma.RateLimitBucketWhereInput[]
   NOT?: Prisma.RateLimitBucketWhereInput | Prisma.RateLimitBucketWhereInput[]
-  id?: Prisma.UuidFilter<"RateLimitBucket"> | string
-  apiKeyId?: Prisma.UuidFilter<"RateLimitBucket"> | string
+  id?: Prisma.StringFilter<"RateLimitBucket"> | string
+  apiKeyId?: Prisma.StringFilter<"RateLimitBucket"> | string
   minuteCount?: Prisma.IntFilter<"RateLimitBucket"> | number
   dayCount?: Prisma.IntFilter<"RateLimitBucket"> | number
   minuteResetsAt?: Prisma.DateTimeFilter<"RateLimitBucket"> | Date | string
@@ -280,8 +280,8 @@ export type RateLimitBucketScalarWhereWithAggregatesInput = {
   AND?: Prisma.RateLimitBucketScalarWhereWithAggregatesInput | Prisma.RateLimitBucketScalarWhereWithAggregatesInput[]
   OR?: Prisma.RateLimitBucketScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RateLimitBucketScalarWhereWithAggregatesInput | Prisma.RateLimitBucketScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"RateLimitBucket"> | string
-  apiKeyId?: Prisma.UuidWithAggregatesFilter<"RateLimitBucket"> | string
+  id?: Prisma.StringWithAggregatesFilter<"RateLimitBucket"> | string
+  apiKeyId?: Prisma.StringWithAggregatesFilter<"RateLimitBucket"> | string
   minuteCount?: Prisma.IntWithAggregatesFilter<"RateLimitBucket"> | number
   dayCount?: Prisma.IntWithAggregatesFilter<"RateLimitBucket"> | number
   minuteResetsAt?: Prisma.DateTimeWithAggregatesFilter<"RateLimitBucket"> | Date | string

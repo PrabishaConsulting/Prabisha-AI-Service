@@ -1,0 +1,198 @@
+<!-- views/docs/chat.hbs -->
+<div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Chat Completion API</h1>
+    
+    <div class="bg-purple-50 p-4 rounded-lg mb-6">
+        <p class="text-purple-800 text-sm">
+            <i class="fas fa-info-circle mr-2"></i>
+            Send messages to AI models and get intelligent responses. Supports multiple providers with automatic fallback.
+        </p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Endpoint</h2>
+    <div class="api-endpoint mb-6">
+        <span class="method-post font-bold">POST</span>
+        <code class="text-gray-800">/api/chat</code>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Request Body</h2>
+    <pre><code class="language-json">{
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is artificial intelligence?"
+    }
+  ],
+  "model": "gpt-3.5-turbo",
+  "temperature": 0.7,
+  "maxTokens": 1000,
+  "preferredProvider": "OPENAI"
+}</code></pre>
+
+    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">Parameters</h3>
+    <table class="min-w-full border-collapse border border-gray-200 mb-6">
+        <thead>
+            <tr class="bg-gray-50">
+                <th class="border border-gray-200 px-4 py-2 text-left">Parameter</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Type</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Required</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code>messages</code></td>
+                <td class="border border-gray-200 px-4 py-2">Array</td>
+                <td class="border border-gray-200 px-4 py-2">Yes</td>
+                <td class="border border-gray-200 px-4 py-2">Array of message objects with 'role' and 'content'</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code>model</code></td>
+                <td class="border border-gray-200 px-4 py-2">String</td>
+                <td class="border border-gray-200 px-4 py-2">No</td>
+                <td class="border border-gray-200 px-4 py-2">Model name (e.g., gpt-3.5-turbo, claude-3-sonnet)</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code>temperature</code></td>
+                <td class="border border-gray-200 px-4 py-2">Number</td>
+                <td class="border border-gray-200 px-4 py-2">No</td>
+                <td class="border border-gray-200 px-4 py-2">Controls randomness (0-2, default: 0.7)</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code>maxTokens</code></td>
+                <td class="border border-gray-200 px-4 py-2">Number</td>
+                <td class="border border-gray-200 px-4 py-2">No</td>
+                <td class="border border-gray-200 px-4 py-2">Maximum tokens in response</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2"><code>preferredProvider</code></td>
+                <td class="border border-gray-200 px-4 py-2">String</td>
+                <td class="border border-gray-200 px-4 py-2">No</td>
+                <td class="border border-gray-200 px-4 py-2">Preferred AI provider (OPENAI, ANTHROPIC, GEMINI, MISTRAL)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Example Response</h2>
+    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "content": "Artificial intelligence (AI) is the simulation of human intelligence in machines...",
+    "model": "gpt-3.5-turbo",
+    "provider": "OPENAI",
+    "usage": {
+      "promptTokens": 15,
+      "completionTokens": 120,
+      "totalTokens": 135
+    },
+    "latency": 342
+  }
+}</code></pre>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Code Examples</h2>
+    
+    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">cURL</h3>
+    <pre><code class="language-bash">curl -X POST https://api.yourdomain.com/api/chat \
+  -H "X-API-Key: your-api-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "What is machine learning?"}
+    ],
+    "temperature": 0.5
+  }'</code></pre>
+
+    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">JavaScript</h3>
+    <pre><code class="language-javascript">const axios = require('axios');
+
+async function getChatResponse() {
+  const response = await axios.post('https://api.yourdomain.com/api/chat', {
+    messages: [
+      { role: 'user', content: 'Explain quantum computing' }
+    ],
+    temperature: 0.7,
+    maxTokens: 500
+  }, {
+    headers: {
+      'X-API-Key': 'your-api-key-here',
+      'Content-Type': 'application/json'
+    }
+  });
+  
+  console.log(response.data.data.content);
+}
+
+getChatResponse();</code></pre>
+
+    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">Python</h3>
+    <pre><code class="language-python">import requests
+
+url = "https://api.yourdomain.com/api/chat"
+headers = {
+    "X-API-Key": "your-api-key-here",
+    "Content-Type": "application/json"
+}
+data = {
+    "messages": [
+        {"role": "user", "content": "Hello AI!"}
+    ],
+    "temperature": 0.8
+}
+
+response = requests.post(url, json=data, headers=headers)
+print(response.json())</code></pre>
+
+    <!-- Try It Out Section -->
+    <div class="mt-8 border-t pt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Try It Out</h2>
+        <div class="bg-gray-50 rounded-lg p-6">
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Your API Key</label>
+                <input type="password" id="apiKeyInput" class="w-full px-3 py-2 border rounded-lg" placeholder="Enter your API key">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Message</label>
+                <textarea id="messageInput" rows="3" class="w-full px-3 py-2 border rounded-lg" placeholder="Ask me anything...">What is artificial intelligence?</textarea>
+            </div>
+            <button onclick="testChatAPI()" class="try-it-out text-white px-6 py-2 rounded-lg">
+                <i class="fas fa-play mr-2"></i>Send Request
+            </button>
+            <div id="responseArea" class="mt-4 hidden">
+                <label class="block text-sm font-medium mb-2">Response</label>
+                <pre class="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto"><code id="responseContent"></code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function testChatAPI() {
+    const apiKey = document.getElementById('apiKeyInput').value;
+    const message = document.getElementById('messageInput').value;
+    
+    if (!apiKey) {
+        alert('Please enter your API key');
+        return;
+    }
+    
+    try {
+        const response = await axios.post('/api/chat', {
+            messages: [{ role: 'user', content: message }],
+            temperature: 0.7
+        }, {
+            headers: {
+                'X-API-Key': apiKey,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const responseArea = document.getElementById('responseArea');
+        const responseContent = document.getElementById('responseContent');
+        
+        responseContent.textContent = JSON.stringify(response.data, null, 2);
+        responseArea.classList.remove('hidden');
+    } catch (error) {
+        alert('Error: ' + (error.response?.data?.message || error.message));
+    }
+}
+</script>

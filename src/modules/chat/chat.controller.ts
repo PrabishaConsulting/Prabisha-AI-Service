@@ -1,34 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+// src/modules/chat/chat.controller.ts
+import { Controller, Post, Body, UseGuards, Req, Headers } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import { ApiKeyGuard } from '../auth/guards/api-key.guard';
+import { ChatRequestDto } from './dto/chat-request';
 
-@Controller('chat')
+@Controller('api/chat')
+@UseGuards(ApiKeyGuard)
 export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+  constructor(private chatService: ChatService) {}
 
   @Post()
-  create(@Body() createChatDto: CreateChatDto) {
-    return this.chatService.create(createChatDto);
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  async chat(
+    @Body() request: ChatRequestDto,
+    @Req() req: any,
+    @Headers('x-api-key') apiKey: string,
+  ) {
+    const result = await this.chatService.processChat(
+      request,
+      req.user.id,
+      req.user.apiKeyId,
+    );
+    
+    return {
+      success: true,
+      data: result,
+    };
   }
 
-  @Get()
-  findAll() {
-    return this.chatService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.chatService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChatDto: UpdateChatDto) {
-    return this.chatService.update(+id, updateChatDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.chatService.remove(+id);
+  @Post('stream')
+  @Throttle({ default: { limit: 30, ttl: 60000 } })
+  async chatStream(
+    @Body() request: ChatRequestDto,
+    @Req() req: any,
+  ) {
+    return this.chatService.processChatStream(request, req.user.id);
   }
 }

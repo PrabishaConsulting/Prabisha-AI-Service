@@ -71,11 +71,13 @@ enum Modality {
 // =============================================================
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(cuid())
   email     String   @unique @db.VarChar(255)
   name      String?  @db.VarChar(255)
   role      UserRole @default(USER)
+  image     String?
   isActive  Boolean  @default(true)
+  emailVerified DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -94,7 +96,7 @@ model User {
 // =============================================================
 
 model Provider {
-  id             String         @id @default(uuid()) @db.Uuid
+  id             String         @id @default(cuid())
   name           ProviderName   @unique
   displayName    String         @db.VarChar(100)
   encryptedKey   String         @db.Text        // AES-256-GCM encrypted
@@ -129,8 +131,8 @@ model Provider {
 // =============================================================
 
 model ProviderModel {
-  id          String       @id @default(uuid()) @db.Uuid
-  providerId  String       @db.Uuid
+  id          String       @id @default(cuid())
+  providerId  String
   modelId     String       @db.VarChar(150)  // e.g. "gpt-4o", "claude-sonnet-4-5"
   displayName String       @db.VarChar(150)
   modality    Modality
@@ -161,8 +163,8 @@ model ProviderModel {
 // =============================================================
 
 model ApiKey {
-  id          String       @id @default(uuid()) @db.Uuid
-  userId      String       @db.Uuid
+  id          String       @id @default(cuid())
+  userId      String
   keyHash     String       @unique @db.VarChar(255) // bcrypt hash of the raw key
   keyPrefix   String       @db.VarChar(12)           // e.g. "sk-live-xxxx" shown in UI
   name        String       @db.VarChar(100)           // user-defined label
@@ -197,11 +199,11 @@ model ApiKey {
 // =============================================================
 
 model UsageLog {
-  id              String        @id @default(uuid()) @db.Uuid
-  userId          String        @db.Uuid
-  apiKeyId        String        @db.Uuid
-  providerId      String        @db.Uuid
-  providerModelId String        @db.Uuid
+  id              String        @id @default(cuid())
+  userId          String
+  apiKeyId        String
+  providerId      String
+  providerModelId String
   modality        Modality
   status          RequestStatus
 
@@ -248,8 +250,8 @@ model UsageLog {
 // =============================================================
 
 model RateLimitBucket {
-  id          String   @id @default(uuid()) @db.Uuid
-  apiKeyId    String   @unique @db.Uuid
+  id          String   @id @default(cuid())
+  apiKeyId    String   @unique
   minuteCount Int      @default(0)
   dayCount    Int      @default(0)
   minuteResetsAt DateTime

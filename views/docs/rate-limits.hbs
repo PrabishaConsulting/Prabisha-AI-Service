@@ -1,0 +1,74 @@
+<!-- views/docs/rate-limits.hbs -->
+<div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Rate Limits & Usage</h1>
+    
+    <div class="bg-yellow-50 p-4 rounded-lg mb-6">
+        <p class="text-yellow-800 text-sm">
+            <i class="fas fa-tachometer-alt mr-2"></i>
+            Rate limits are applied per API key to ensure fair usage across all users.
+        </p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Default Limits</h2>
+    <table class="min-w-full border-collapse border border-gray-200 mb-6">
+        <thead>
+            <tr class="bg-gray-50">
+                <th class="border border-gray-200 px-4 py-2 text-left">Limit Type</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Default Value</th>
+                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2">Requests per Minute (RPM)</td>
+                <td class="border border-gray-200 px-4 py-2">60</td>
+                <td class="border border-gray-200 px-4 py-2">Maximum API calls per minute</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2">Requests per Day (RPD)</td>
+                <td class="border border-gray-200 px-4 py-2">1000</td>
+                <td class="border border-gray-200 px-4 py-2">Maximum API calls per day</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-200 px-4 py-2">Monthly Token Limit</td>
+                <td class="border border-gray-200 px-4 py-2">Configurable</td>
+                <td class="border border-gray-200 px-4 py-2">Maximum tokens per month</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Rate Limit Headers</h2>
+    <p class="text-gray-600 mb-3">Each response includes headers to help you monitor your usage:</p>
+    <pre><code class="language-bash">X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 58
+X-RateLimit-Reset: 1635200000
+Retry-After: 120</code></pre>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Handling Rate Limits</h2>
+    <p class="text-gray-600 mb-3">When you exceed a rate limit, the API returns a <code class="bg-gray-100 px-2 py-1 rounded">429 Too Many Requests</code> response:</p>
+    
+    <pre><code class="language-json">{
+  "statusCode": 429,
+  "message": "Too many requests. Please try again later.",
+  "retryAfter": 120
+}</code></pre>
+
+    <div class="bg-green-50 border-l-4 border-green-400 p-4 mt-6">
+        <p class="text-green-800 text-sm">
+            <i class="fas fa-lightbulb mr-2"></i>
+            <strong>Best Practice:</strong> Implement exponential backoff in your client to handle rate limit errors gracefully.
+        </p>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Usage Tracking</h2>
+    <p class="text-gray-600 mb-3">
+        You can monitor your API usage and costs through the developer portal dashboard. The dashboard provides:
+    </p>
+    <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
+        <li>Total API calls made</li>
+        <li>Token usage breakdown</li>
+        <li>Cost estimates</li>
+        <li>Response times</li>
+        <li>Provider distribution</li>
+    </ul>
+</div>

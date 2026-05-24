@@ -292,7 +292,7 @@ export type ProviderWhereInput = {
   AND?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
   OR?: Prisma.ProviderWhereInput[]
   NOT?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
-  id?: Prisma.UuidFilter<"Provider"> | string
+  id?: Prisma.StringFilter<"Provider"> | string
   name?: Prisma.EnumProviderNameFilter<"Provider"> | $Enums.ProviderName
   displayName?: Prisma.StringFilter<"Provider"> | string
   encryptedKey?: Prisma.StringFilter<"Provider"> | string
@@ -385,7 +385,7 @@ export type ProviderScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProviderScalarWhereWithAggregatesInput | Prisma.ProviderScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProviderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProviderScalarWhereWithAggregatesInput | Prisma.ProviderScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Provider"> | string
+  id?: Prisma.StringWithAggregatesFilter<"Provider"> | string
   name?: Prisma.EnumProviderNameWithAggregatesFilter<"Provider"> | $Enums.ProviderName
   displayName?: Prisma.StringWithAggregatesFilter<"Provider"> | string
   encryptedKey?: Prisma.StringWithAggregatesFilter<"Provider"> | string
