@@ -1,0 +1,33 @@
+name: Auto Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: cloud.prabisha.com
+          username: tvmcloud
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 18208
+          script: |
+            cd /var/www/services/ai-service
+            git fetch origin
+            git reset --hard origin/main
+            
+            # Ensure .env file exists (should be on server, not in git)
+            if [ ! -f .env ]; then
+              echo "❌ Error: .env file not found!"
+              exit 1
+            fi
+            
+            chmod +x deploy.sh
+            ./deploy.sh

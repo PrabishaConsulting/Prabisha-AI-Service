@@ -3,14 +3,14 @@
 # Customize these values for each project
 
 # Project Details
-PROJECT_NAME="audit"
-PROJECT_PATH="/var/www/pm"
+PROJECT_NAME="aiservice"
+PROJECT_PATH="/var/www/services/ai-service"
 GIT_BRANCH="main"
 GIT_REMOTE="origin"
 
 # Server Configuration
-PORT=3039
-PM2_SERVICE_NAME="pm-3039"
+PORT=3048
+PM2_SERVICE_NAME="aiservice-3048"
 SSH_PORT=18208
 SSH_USERNAME="tvmcloud"
 
