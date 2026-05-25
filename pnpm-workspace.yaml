@@ -1,0 +1,7 @@
+allowBuilds:
+  '@prisma/engines': false
+  lzo: false
+  prisma: false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false
