@@ -18,8 +18,8 @@ export class AdminGuard implements CanActivate {
       if (request.url.startsWith('/api/')) {
         throw new UnauthorizedException('Not authenticated');
       }
-      // For view requests, redirect to login
-      response.redirect('/auth/login');
+      // For view requests, redirect to home
+      response.redirect('/');
       return false;
     }
 
@@ -30,7 +30,7 @@ export class AdminGuard implements CanActivate {
 
     if (!dbUser || dbUser.role !== 'ADMIN') {
       request.session.destroy();
-      response.redirect('/auth/login');
+      response.redirect('/');
       return false;
     }
 

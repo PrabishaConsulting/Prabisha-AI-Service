@@ -1,189 +1,201 @@
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Gateway - Unified AI Infrastructure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPrimary: '#111CA8',
+                        brandAccent: '#DE6A2C',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-hero-text {
+            background: linear-gradient(135deg, #111CA8 30%, #DE6A2C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cta-gradient {
+            background: linear-gradient(135deg, #111CA8 0%, #1a29cc 100%);
+        }
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(17, 28, 168, 0.04) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(17, 28, 168, 0.04) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-900 selection:bg-orange-200">
 
-<style>
-    /* Utility mappings for your template's custom helper classes */
-    .gradient-text {
-        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .gradient-bg {
-        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-        transition: all 0.2s ease-in-out;
-    }
-    .btn-primary:hover {
-        opacity: 0.95;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
-    }
-    .card-hover {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 8px -5px rgba(0, 0, 0, 0.04);
-    }
-    .feature-icon {
-        background-color: #f3e8ff;
-    }
-</style>
+    {{> public_header }}
 
-<div class="min-h-screen bg-white font-sans antialiased text-gray-900">
-    <section class="relative overflow-hidden bg-white">
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-100 opacity-50"></div>
-        <div class="container mx-auto px-6 py-20 relative">
-            <div class="text-center">
-                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-                    Unified API for
-                    <span class="gradient-text">Leading AI Models</span>
-                </h1>
-                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                    Access OpenAI, Anthropic, Gemini, and Mistral through a single, powerful API. 
-                    Built for developers, designed for scale.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="/auth/register" class="btn-primary text-white px-8 py-3 rounded-lg font-medium text-lg inline-block shadow-md">
-                        Get Started Free
-                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                    </a>
-                    <a href="/docs" class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-medium text-lg hover:bg-purple-50 transition-colors duration-200">
-                        View Documentation
-                    </a>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
-                    <div class="text-center p-4">
-                        <div class="text-4xl font-bold gradient-text">4+</div>
-                        <p class="text-gray-600 font-medium mt-2">AI Providers</p>
-                    </div>
-                    <div class="text-center p-4">
-                        <div class="text-4xl font-bold gradient-text">99.9%</div>
-                        <p class="text-gray-600 font-medium mt-2">Uptime SLA</p>
-                    </div>
-                    <div class="text-center p-4">
-                        <div class="text-4xl font-bold gradient-text">&lt;100ms</div>
-                        <p class="text-gray-600 font-medium mt-2">Average Latency</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 bg-gray-50 border-t border-b border-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-                    Why Choose AI Gateway?
-                </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Everything you need to build powerful AI applications
-                </p>
-            </div>
+    <main class="min-h-screen">
+        <section class="relative overflow-hidden bg-white border-b border-slate-100 bg-grid-pattern py-24 lg:py-32">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-orange-100/40 to-indigo-100/20 rounded-full filter blur-3xl -z-10 pointer-events-none"></div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-bolt text-purple-600 text-xl"></i>
+            <div class="container mx-auto px-6 relative">
+                <div class="text-center max-w-4xl mx-auto">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-orange-700 bg-orange-50 rounded-full border border-orange-200 mb-6">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brandAccent animate-pulse"></span> Production Ready v2.0
+                    </span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 mb-8 tracking-tight leading-[1.1]">
+                        Unified API for <br>
+                        <span class="gradient-hero-text">Leading AI Models</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Access OpenAI, Anthropic, Gemini, and Mistral through a single production-grade pipeline. Built for scaling modern engineering teams.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="/auth/register" class="w-full sm:w-auto text-center font-semibold text-white px-8 py-3.5 rounded-xl shadow-lg transition-all duration-200 hover:scale-[1.02]" style="background-color: #111CA8; shadow-color: rgba(17, 28, 168, 0.3);">
+                            Get Started Free <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                        <a href="/docs" class="w-full sm:w-auto text-center border border-slate-200 bg-white text-slate-700 px-8 py-3.5 rounded-xl font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all duration-200">
+                            View Documentation
+                        </a>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast & Reliable</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">Low latency responses with automatic failover between providers</p>
-                </div>
-                
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-20 p-6 bg-white border border-slate-200/60 rounded-2xl shadow-xl max-w-3xl mx-auto backdrop-blur-sm bg-opacity-80">
+                        <div class="text-center p-4">
+                            <div class="text-4xl font-extrabold" style="color: #111CA8;">4+</div>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Core Providers Injected</p>
+                        </div>
+                        <div class="text-center p-4 border-y sm:border-y-0 sm:border-x border-slate-100">
+                            <div class="text-4xl font-extrabold" style="color: #111CA8;">99.99%</div>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Guaranteed Uptime</p>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-4xl font-extrabold" style="color: #DE6A2C;">&lt;100ms</div>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Global Core Latency</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Secure by Default</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">API keys encrypted at rest, rate limiting, and request validation</p>
-                </div>
-                
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Usage Analytics</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">Real-time tracking of tokens, costs, and performance metrics</p>
-                </div>
-                
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-code text-purple-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Easy Integration</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">Simple REST API with SDKs for JavaScript, Python, and more</p>
-                </div>
-                
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cost Optimization</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">Smart routing to minimize costs while maintaining quality</p>
-                </div>
-                
-                <div class="bg-white border border-gray-100 rounded-xl p-6 card-hover shadow-sm">
-                    <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-cloud-upload-alt text-purple-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Multi-Modal</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">Support for text, images, video, and embeddings</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-                    Supported AI Providers
-                </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Access the world's leading AI models through one API
+        <section class="py-24 bg-slate-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+                        Why Engineers Choose AI Gateway
+                    </h2>
+                    <p class="text-lg text-slate-600 max-w-xl mx-auto">
+                        Enterprise-ready layer designed to streamline continuous AI deployments.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(17, 28, 168, 0.06);">
+                            <i class="fas fa-bolt text-xl transition-transform group-hover:scale-110" style="color: #111CA8;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Fast & Reliable</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Low latency proxy responses backed with fallback routines and dynamic routing policies.</p>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(222, 106, 44, 0.06);">
+                            <i class="fas fa-shield-alt text-xl transition-transform group-hover:scale-110" style="color: #DE6A2C;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Secure by Default</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Keys encrypted strictly at rest with secure token isolation, internal rate limiting, and parameter checking.</p>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(17, 28, 168, 0.06);">
+                            <i class="fas fa-chart-line text-xl transition-transform group-hover:scale-110" style="color: #111CA8;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Usage Analytics</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Deep tracking over metrics, compute consumption, prompt tokens, context window overhead, and real-time outlays.</p>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(222, 106, 44, 0.06);">
+                            <i class="fas fa-code text-xl transition-transform group-hover:scale-110" style="color: #DE6A2C;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Easy Integration</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Native drop-in interface engine ready for custom configurations using standard JS, Python runtime modules.</p>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(17, 28, 168, 0.06);">
+                            <i class="fas fa-dollar-sign text-xl transition-transform group-hover:scale-110" style="color: #111CA8;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Cost Optimization</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Automated dynamic runtime engine execution pathways optimized for minimizing structural API billings.</p>
+                    </div>
+                    
+                    <div class="bg-white border border-slate-200/80 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors" style="background-color: rgba(222, 106, 44, 0.06);">
+                            <i class="fas fa-cloud-upload-alt text-xl transition-transform group-hover:scale-110" style="color: #DE6A2C;"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Multi-Modal Base</h3>
+                        <p class="text-slate-600 leading-relaxed text-sm">Native cross-functional handling for vectors, system audio, production matrices, structures, and dense token patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4 tracking-tight">Supported Native Frameworks</h2>
+                    <p class="text-slate-500 max-w-md mx-auto text-sm">Plug models seamlessly without custom structural adaptations.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                    <div class="p-6 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-300 hover:bg-slate-100/50 transition-all text-center">
+                        <i class="fab fa-openai text-4xl text-slate-800 mb-3 block"></i>
+                        <span class="font-bold text-slate-900 text-sm">OpenAI</span>
+                        <p class="text-xs text-slate-400 mt-1">GPT-4o, o1</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-300 hover:bg-slate-100/50 transition-all text-center">
+                        <i class="fas fa-robot text-4xl text-slate-700 mb-3 block"></i>
+                        <span class="font-bold text-slate-900 text-sm">Anthropic</span>
+                        <p class="text-xs text-slate-400 mt-1">Claude 3.5 Sonnet</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-300 hover:bg-slate-100/50 transition-all text-center">
+                        <i class="fab fa-google text-4xl text-blue-600 mb-3 block"></i>
+                        <span class="font-bold text-slate-900 text-sm">Google Gemini</span>
+                        <p class="text-xs text-slate-400 mt-1">Gemini 1.5 Pro</p>
+                    </div>
+                    <div class="p-6 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-300 hover:bg-slate-100/50 transition-all text-center">
+                        <i class="fas fa-wind text-4xl text-sky-500 mb-3 block"></i>
+                        <span class="font-bold text-slate-900 text-sm">Mistral AI</span>
+                        <p class="text-xs text-slate-400 mt-1">Mistral Large 2</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 text-white relative overflow-hidden" style="background-color: #111CA8;">
+            <div class="absolute inset-0 opacity-10 bg-grid-pattern"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="text-4xl font-extrabold mb-4 tracking-tight">Ready to integrate?</h2>
+                <p class="text-indigo-100 mb-10 max-w-xl mx-auto font-medium">
+                    Provision global enterprise access setups inside single modular routing contexts within 5 minutes.
                 </p>
+                <a href="/auth/register" class="bg-white px-8 py-4 rounded-xl font-bold shadow-xl transition-all duration-200 hover:scale-105 inline-block" style="color: #111CA8;">
+                    Create Account Free <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
             </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
-                    <i class="fab fa-openai text-5xl text-gray-800"></i>
-                    <p class="font-semibold mt-3 text-gray-900">OpenAI</p>
-                    <p class="text-xs text-gray-500 mt-1">GPT-4o, o1</p>
-                </div>
-                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-robot text-5xl text-gray-600"></i>
-                    <p class="font-semibold mt-3 text-gray-900">Anthropic</p>
-                    <p class="text-xs text-gray-500 mt-1">Claude 3.5 Sonnet</p>
-                </div>
-                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
-                    <i class="fab fa-google text-5xl text-blue-600"></i>
-                    <p class="font-semibold mt-3 text-gray-900">Google Gemini</p>
-                    <p class="text-xs text-gray-500 mt-1">Gemini 1.5 Pro</p>
-                </div>
-                <div class="text-center p-6 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
-                    <i class="fas fa-wind text-5xl text-blue-400"></i>
-                    <p class="font-semibold mt-3 text-gray-900">Mistral AI</p>
-                    <p class="text-xs text-gray-500 mt-1">Mistral Large 2</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <section class="py-20 gradient-bg text-white">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
-                Ready to get started?
-            </h2>
-            <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Join thousands of developers using AI Gateway to build amazing applications
-            </p>
-            <a href="/auth/register" class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-medium text-lg hover:shadow-xl transition-all duration-200 inline-block transform hover:-translate-y-0.5">
-                Get Your API Key
-                <i class="fas fa-arrow-right ml-2 text-sm"></i>
-            </a>
+    <footer class="bg-slate-900 border-t border-slate-800 py-12 text-center text-xs text-slate-400">
+        <div class="container mx-auto px-6">
+            <p class="mb-2">© 2026 AI Gateway - All rights reserved • Secured by OIDC SSO</p>
+            <p class="text-slate-600">Enterprise Orchestration Infrastructure</p>
         </div>
-    </section>
-</div>
+    </footer>
+
+</body>
+</html>

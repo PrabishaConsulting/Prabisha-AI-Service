@@ -42,7 +42,7 @@ export class AdminController {
   }
 
   @Get('providers')
-  @Render('providers')
+  @Render('admin/providers')
   async providers(@Req() req: RequestWithUser) {
     const providers = await this.adminService.getAllProviders();
     
@@ -115,7 +115,7 @@ export class AdminController {
   }
 
   @Get('users')
-  @Render('users')
+  @Render('admin/users')
   async users(@Req() req: RequestWithUser) {
     const users = await this.adminService.getUsers();
     

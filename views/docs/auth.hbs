@@ -1,49 +1,31 @@
-<!-- views/docs/authentication.hbs -->
 <div>
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Authentication</h1>
-    
-    <p class="text-gray-600 mb-6">
-        The AI Gateway API uses API keys to authenticate requests. You can obtain your API key from the developer portal after logging in.
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3">API Authentication Architecture</h1>
+    <p class="text-slate-600 mb-8 leading-relaxed">
+        The gateway enforces system layer state requirements via unique API Keys passed dynamically over safe encrypted header fields. Request instances lacking valid properties drop prior to downstream proxy queues.
     </p>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Getting Your API Key</h2>
-    <div class="space-y-4">
-        <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span class="text-purple-600 font-bold">1</span>
-            </div>
-            <div>
-                <p class="text-gray-700">Log in to the <a href="/auth/login" class="text-purple-600 hover:underline">Developer Portal</a></p>
-            </div>
+    <h2 class="text-xl font-bold text-slate-900 mb-4">Provisioning Key Tokens</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
+            <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">1</span>
+            <p class="text-sm text-slate-600">Enter your institutional developer identity path inside the <a href="/auth/central" class="underline font-medium" style="color: #111CA8;">Portal Link</a>.</p>
         </div>
-        <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span class="text-purple-600 font-bold">2</span>
-            </div>
-            <div>
-                <p class="text-gray-700">Navigate to "API Keys" section</p>
-            </div>
+        <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
+            <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">2</span>
+            <p class="text-sm text-slate-600">Route inside layout panels directly to the active <strong>API Configuration Key</strong> area.</p>
         </div>
-        <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span class="text-purple-600 font-bold">3</span>
-            </div>
-            <div>
-                <p class="text-gray-700">Click "Create API Key" and give it a name</p>
-            </div>
+        <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
+            <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">3</span>
+            <p class="text-sm text-slate-600">Execute <strong>"Generate New Structural Secret"</strong> and label its tracking profile name.</p>
         </div>
-        <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span class="text-purple-600 font-bold">4</span>
-            </div>
-            <div>
-                <p class="text-gray-700">Copy your API key immediately (it won't be shown again!)</p>
-            </div>
+        <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
+            <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">4</span>
+            <p class="text-sm text-slate-600 font-semibold text-slate-900">Store properties securely immediately. Strings mask permanently once closed.</p>
         </div>
     </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Using Your API Key</h2>
-    <p class="text-gray-600 mb-3">Include your API key in all API requests using the <code class="bg-gray-100 px-2 py-1 rounded">X-API-Key</code> header:</p>
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Header Reference Schema</h2>
+    <p class="text-sm text-slate-600 mb-4">Populate downstream operational request executions using standard key headers:</p>
     
     <pre><code class="language-bash">curl -X POST https://api.yourdomain.com/api/chat \
   -H "X-API-Key: your-api-key-here" \
@@ -52,39 +34,40 @@
     "messages": [{"role": "user", "content": "Hello!"}]
   }'</code></pre>
 
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
-        <p class="text-yellow-800 text-sm">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            <strong>Security Note:</strong> Never share your API key publicly or expose it in client-side code. Always keep it secure on your backend servers.
+    <div class="border-l-4 p-4 my-6 rounded-r-xl bg-orange-50/60 border-orange-500">
+        <p class="text-orange-950 text-sm leading-relaxed">
+            <i class="fas fa-exclamation-triangle mr-2 text-orange-600"></i>
+            <strong>Infrastructure Warning:</strong> Do not leak tokens inside client-side client tracking state matrices or repository structures. Manage inputs via secure environmental processes.
         </p>
     </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">API Key Scopes</h2>
-    <p class="text-gray-600 mb-3">Each API key can be configured with specific scopes to limit access:</p>
-    <table class="min-w-full border-collapse border border-gray-200 mb-6">
-        <thead>
-            <tr class="bg-gray-50">
-                <th class="border border-gray-200 px-4 py-2 text-left">Scope</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">CHAT</code></td>
-                <td class="border border-gray-200 px-4 py-2">Access to chat completion endpoints</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">IMAGE</code></td>
-                <td class="border border-gray-200 px-4 py-2">Access to image generation endpoints</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">VIDEO</code></td>
-                <td class="border border-gray-200 px-4 py-2">Access to video generation endpoints</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code class="bg-gray-100 px-2 py-1 rounded">EMBEDDINGS</code></td>
-                <td class="border border-gray-200 px-4 py-2">Access to embeddings endpoints</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 class="text-xl font-bold text-slate-900 mt-8 mb-4">API Key Scopes Matrix</h2>
+    <div class="overflow-hidden border border-slate-200 rounded-xl shadow-sm">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Scope Type</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Downstream Queue Access Route Target</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600 bg-white">
+                <tr>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">CHAT</td>
+                    <td class="px-4 py-3">Grants access structural context vectors to <code>/api/chat</code> pathways.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">IMAGE</td>
+                    <td class="px-4 py-3">Grants image rasterization privileges inside processing endpoints.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">VIDEO</td>
+                    <td class="px-4 py-3">Enables asynchronous access limits targeting rendering processors.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">EMBEDDINGS</td>
+                    <td class="px-4 py-3">Grants deep token mathematical encoding access models.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

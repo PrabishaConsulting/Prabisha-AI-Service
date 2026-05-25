@@ -1,74 +1,65 @@
-<!-- views/docs/rate-limits.hbs -->
 <div>
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Rate Limits & Usage</h1>
-    
-    <div class="bg-yellow-50 p-4 rounded-lg mb-6">
-        <p class="text-yellow-800 text-sm">
-            <i class="fas fa-tachometer-alt mr-2"></i>
-            Rate limits are applied per API key to ensure fair usage across all users.
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3">Rate Limits & Traffic Policing</h1>
+    <p class="text-slate-600 mb-8 leading-relaxed">
+        Throttling layers guard internal system microservices from token drain trends. Requests matching parameters inside downstream routing pools increment core sliding windows using Redis key sets.
+    </p>
+
+    <div class="border border-amber-200 bg-amber-50/50 rounded-xl p-4 mb-8 flex gap-3 items-start">
+        <i class="fas fa-tachometer-alt text-amber-600 mt-0.5"></i>
+        <p class="text-amber-900 text-sm leading-relaxed">
+            <strong>Key Isolation Policies:</strong> Threshold evaluation bounds evaluate strictly per unique configuration key token array context. Tier escalation modifications alter metric shapes instantly.
         </p>
     </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Default Limits</h2>
-    <table class="min-w-full border-collapse border border-gray-200 mb-6">
-        <thead>
-            <tr class="bg-gray-50">
-                <th class="border border-gray-200 px-4 py-2 text-left">Limit Type</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Default Value</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2">Requests per Minute (RPM)</td>
-                <td class="border border-gray-200 px-4 py-2">60</td>
-                <td class="border border-gray-200 px-4 py-2">Maximum API calls per minute</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2">Requests per Day (RPD)</td>
-                <td class="border border-gray-200 px-4 py-2">1000</td>
-                <td class="border border-gray-200 px-4 py-2">Maximum API calls per day</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2">Monthly Token Limit</td>
-                <td class="border border-gray-200 px-4 py-2">Configurable</td>
-                <td class="border border-gray-200 px-4 py-2">Maximum tokens per month</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 class="text-xl font-bold text-slate-900 mb-4">Standard Operational Limit Bounds</h2>
+    <div class="overflow-hidden border border-slate-200 rounded-xl shadow-sm mb-8">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Metric Target Class</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Default Sandbox Threshold</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Tracking Logic Interval</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600 bg-white">
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">Requests per Minute (RPM)</td>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-slate-800">60 reqs/min</td>
+                    <td class="px-4 py-3">Resets on a moving window loop layer per 60s.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">Requests per Day (RPD)</td>
+                    <td class="px-4 py-3 font-mono text-xs font-bold text-slate-800">1,000 reqs/day</td>
+                    <td class="px-4 py-3">Resets completely at 00:00 UTC cycle ticks.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">Monthly Token Volume Limit</td>
+                    <td class="px-4 py-3 font-mono text-xs text-orange-600 font-bold">Dynamic Allocation</td>
+                    <td class="px-4 py-3">Configured individually within internal database tables.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Rate Limit Headers</h2>
-    <p class="text-gray-600 mb-3">Each response includes headers to help you monitor your usage:</p>
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Monitoring Header Streams</h2>
+    <p class="text-sm text-slate-600 mb-4">Track metrics dynamically during payload streams using system transaction headers:</p>
     <pre><code class="language-bash">X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 58
 X-RateLimit-Reset: 1635200000
 Retry-After: 120</code></pre>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Handling Rate Limits</h2>
-    <p class="text-gray-600 mb-3">When you exceed a rate limit, the API returns a <code class="bg-gray-100 px-2 py-1 rounded">429 Too Many Requests</code> response:</p>
-    
+    <h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Overhead Response Packet Shape</h2>
+    <p class="text-sm text-slate-600 mb-4">When parameters exceed standard traffic metrics, execution routes error patterns instantly with code <code>429</code>:</p>
     <pre><code class="language-json">{
   "statusCode": 429,
   "message": "Too many requests. Please try again later.",
   "retryAfter": 120
 }</code></pre>
 
-    <div class="bg-green-50 border-l-4 border-green-400 p-4 mt-6">
-        <p class="text-green-800 text-sm">
-            <i class="fas fa-lightbulb mr-2"></i>
-            <strong>Best Practice:</strong> Implement exponential backoff in your client to handle rate limit errors gracefully.
+    <div class="border-l-4 p-4 mt-6 rounded-r-xl bg-emerald-50/60 border-emerald-500 flex gap-3 items-start">
+        <i class="fas fa-lightbulb text-emerald-600 mt-0.5"></i>
+        <p class="text-emerald-950 text-sm leading-relaxed">
+            <strong>Architecture Recommendation:</strong> Implement standard exponential backoff delay routines when handling consumer execution threads to buffer payload re-transmission safely.
         </p>
     </div>
-
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Usage Tracking</h2>
-    <p class="text-gray-600 mb-3">
-        You can monitor your API usage and costs through the developer portal dashboard. The dashboard provides:
-    </p>
-    <ul class="list-disc list-inside space-y-2 text-gray-600 ml-4">
-        <li>Total API calls made</li>
-        <li>Token usage breakdown</li>
-        <li>Cost estimates</li>
-        <li>Response times</li>
-        <li>Provider distribution</li>
-    </ul>
 </div>

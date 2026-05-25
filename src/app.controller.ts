@@ -16,20 +16,4 @@ export class AppController {
   getHome() {
     return { title: 'AI Gateway - Unified API' };
   }
-
-  @Get('login')
-  @Render('login')
-  getLogin() {
-    return {
-      title: this.config.get('APP_NAME'),
-    };
-  }
-
-  @Get('register')
-  @Render('register')
-  getRegister() {
-    return {
-      title: this.config.get('APP_NAME'),
-    };
-  }
 }

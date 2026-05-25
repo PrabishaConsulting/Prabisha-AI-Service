@@ -35,7 +35,7 @@ export class AuthController {
     
     if (!req.user) {
       console.error('No user in request after OAuth callback');
-      return res.redirect('/auth/login?error=auth_failed');
+      return res.redirect('/auth/central?error=auth_failed');
     }
     
     // Store user in session
@@ -43,7 +43,7 @@ export class AuthController {
     req.session.save((err) => {
       if (err) {
         console.error('Session save error:', err);
-        return res.redirect('/auth/login?error=session_error');
+        return res.redirect('/auth/central?error=session_error');
       }
       console.log('User authenticated successfully:', req.user.email);
       console.log('User role:', req.user.role);
@@ -62,7 +62,7 @@ export class AuthController {
   async logout(@Req() req: any, @Res() res: any) {
     req.session.destroy((err) => {
       if (err) console.error('Session destroy error:', err);
-      res.redirect('/auth/login');
+      res.redirect('/');
     });
   }
   

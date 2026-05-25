@@ -1,84 +1,79 @@
-<!-- views/docs/chat.hbs -->
 <div>
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Chat Completion API</h1>
+    <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">Core Engine</span>
+    </div>
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-4">Chat Completion API Layer</h1>
     
-    <div class="bg-purple-50 p-4 rounded-lg mb-6">
-        <p class="text-purple-800 text-sm">
-            <i class="fas fa-info-circle mr-2"></i>
-            Send messages to AI models and get intelligent responses. Supports multiple providers with automatic fallback.
-        </p>
+    <p class="text-slate-600 mb-6 leading-relaxed">
+        Dispatches message arrays through highly optimized connection instances with transparent execution retry layers handling cross-model transformations automatically.
+    </p>
+
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Endpoint Structure</h2>
+    <div class="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 mb-8 font-mono text-sm shadow-inner">
+        <span class="px-2.5 py-0.5 rounded text-xs font-extrabold text-white bg-emerald-600">POST</span>
+        <span class="text-slate-200">/api/chat</span>
     </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Endpoint</h2>
-    <div class="api-endpoint mb-6">
-        <span class="method-post font-bold">POST</span>
-        <code class="text-gray-800">/api/chat</code>
-    </div>
-
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Request Body</h2>
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Payload Paradigm Spec</h2>
     <pre><code class="language-json">{
   "messages": [
     {
       "role": "user",
-      "content": "What is artificial intelligence?"
+      "content": "Explain core caching patterns."
     }
   ],
-  "model": "gpt-3.5-turbo",
+  "model": "gpt-4o",
   "temperature": 0.7,
   "maxTokens": 1000,
   "preferredProvider": "OPENAI"
 }</code></pre>
 
-    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">Parameters</h3>
-    <table class="min-w-full border-collapse border border-gray-200 mb-6">
-        <thead>
-            <tr class="bg-gray-50">
-                <th class="border border-gray-200 px-4 py-2 text-left">Parameter</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Type</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Required</th>
-                <th class="border border-gray-200 px-4 py-2 text-left">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code>messages</code></td>
-                <td class="border border-gray-200 px-4 py-2">Array</td>
-                <td class="border border-gray-200 px-4 py-2">Yes</td>
-                <td class="border border-gray-200 px-4 py-2">Array of message objects with 'role' and 'content'</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code>model</code></td>
-                <td class="border border-gray-200 px-4 py-2">String</td>
-                <td class="border border-gray-200 px-4 py-2">No</td>
-                <td class="border border-gray-200 px-4 py-2">Model name (e.g., gpt-3.5-turbo, claude-3-sonnet)</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code>temperature</code></td>
-                <td class="border border-gray-200 px-4 py-2">Number</td>
-                <td class="border border-gray-200 px-4 py-2">No</td>
-                <td class="border border-gray-200 px-4 py-2">Controls randomness (0-2, default: 0.7)</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code>maxTokens</code></td>
-                <td class="border border-gray-200 px-4 py-2">Number</td>
-                <td class="border border-gray-200 px-4 py-2">No</td>
-                <td class="border border-gray-200 px-4 py-2">Maximum tokens in response</td>
-            </tr>
-            <tr>
-                <td class="border border-gray-200 px-4 py-2"><code>preferredProvider</code></td>
-                <td class="border border-gray-200 px-4 py-2">String</td>
-                <td class="border border-gray-200 px-4 py-2">No</td>
-                <td class="border border-gray-200 px-4 py-2">Preferred AI provider (OPENAI, ANTHROPIC, GEMINI, MISTRAL)</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 class="text-xl font-bold text-slate-900 mt-8 mb-4">Request Field Configurations</h2>
+    <div class="overflow-hidden border border-slate-200 rounded-xl shadow-sm mb-8">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Parameter</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Type</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Required</th>
+                    <th class="px-4 py-3 text-left font-semibold text-slate-700">Description Rule</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600 bg-white">
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">messages</td>
+                    <td class="px-4 py-3 font-mono text-xs">Array</td>
+                    <td class="px-4 py-3 text-orange-600 font-medium">True</td>
+                    <td class="px-4 py-3 text-xs">Objects array processing <code>role</code> and context strings.</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">model</td>
+                    <td class="px-4 py-3 font-mono text-xs">String</td>
+                    <td class="px-4 py-3 text-slate-400">False</td>
+                    <td class="px-4 py-3 text-xs">Target system weights string tag (e.g. <code>claude-3-5-sonnet</code>).</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">temperature</td>
+                    <td class="px-4 py-3 font-mono text-xs">Number</td>
+                    <td class="px-4 py-3 text-slate-400">False</td>
+                    <td class="px-4 py-3 text-xs">Probability spread variance metrics control boundaries [0-2]. Default 0.7</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">preferredProvider</td>
+                    <td class="px-4 py-3 font-mono text-xs">String</td>
+                    <td class="px-4 py-3 text-slate-400">False</td>
+                    <td class="px-4 py-3 text-xs">Target strict routing bypass parameters: <code>OPENAI</code>, <code>GEMINI</code>, etc.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Example Response</h2>
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Unified Output Object Shape</h2>
     <pre><code class="language-json">{
   "success": true,
   "data": {
-    "content": "Artificial intelligence (AI) is the simulation of human intelligence in machines...",
-    "model": "gpt-3.5-turbo",
+    "content": "Systems logic returned successfully.",
+    "model": "gpt-4o",
     "provider": "OPENAI",
     "usage": {
       "promptTokens": 15,
@@ -89,77 +84,34 @@
   }
 }</code></pre>
 
-    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Code Examples</h2>
-    
-    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">cURL</h3>
-    <pre><code class="language-bash">curl -X POST https://api.yourdomain.com/api/chat \
-  -H "X-API-Key: your-api-key-here" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {"role": "user", "content": "What is machine learning?"}
-    ],
-    "temperature": 0.5
-  }'</code></pre>
-
-    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">JavaScript</h3>
-    <pre><code class="language-javascript">const axios = require('axios');
-
-async function getChatResponse() {
-  const response = await axios.post('https://api.yourdomain.com/api/chat', {
-    messages: [
-      { role: 'user', content: 'Explain quantum computing' }
-    ],
-    temperature: 0.7,
-    maxTokens: 500
-  }, {
-    headers: {
-      'X-API-Key': 'your-api-key-here',
-      'Content-Type': 'application/json'
-    }
-  });
-  
-  console.log(response.data.data.content);
-}
-
-getChatResponse();</code></pre>
-
-    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3">Python</h3>
-    <pre><code class="language-python">import requests
-
-url = "https://api.yourdomain.com/api/chat"
-headers = {
-    "X-API-Key": "your-api-key-here",
-    "Content-Type": "application/json"
-}
-data = {
-    "messages": [
-        {"role": "user", "content": "Hello AI!"}
-    ],
-    "temperature": 0.8
-}
-
-response = requests.post(url, json=data, headers=headers)
-print(response.json())</code></pre>
-
-    <!-- Try It Out Section -->
-    <div class="mt-8 border-t pt-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Try It Out</h2>
-        <div class="bg-gray-50 rounded-lg p-6">
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">Your API Key</label>
-                <input type="password" id="apiKeyInput" class="w-full px-3 py-2 border rounded-lg" placeholder="Enter your API key">
+    <div class="mt-12 border-t border-slate-200 pt-8">
+        <div class="bg-slate-900 text-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-800">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">API Request Sandbox Terminal</h3>
+                    <p class="text-xs text-slate-400">Dispatch live exploratory testing requests directly across node loops.</p>
+                </div>
+                <i class="fas fa-terminal text-slate-700 text-xl"></i>
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">Message</label>
-                <textarea id="messageInput" rows="3" class="w-full px-3 py-2 border rounded-lg" placeholder="Ask me anything...">What is artificial intelligence?</textarea>
-            </div>
-            <button onclick="testChatAPI()" class="try-it-out text-white px-6 py-2 rounded-lg">
-                <i class="fas fa-play mr-2"></i>Send Request
-            </button>
-            <div id="responseArea" class="mt-4 hidden">
-                <label class="block text-sm font-medium mb-2">Response</label>
-                <pre class="bg-gray-900 text-white p-4 rounded-lg overflow-x-auto"><code id="responseContent"></code></pre>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Target Client Key Credentials</label>
+                    <input type="password" id="apiKeyInput" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition" placeholder="Paste structural X-API-Key string context">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Prompt Input String Area</label>
+                    <textarea id="messageInput" rows="3" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition placeholder:text-slate-600" placeholder="Ask anything...">Explain quantum computing structure simply.</textarea>
+                </div>
+                
+                <button onclick="testChatAPI()" class="w-full font-bold text-sm text-white py-3 rounded-lg transition-transform hover:scale-[1.01]" style="background-color: #DE6A2C;">
+                    <i class="fas fa-bolt mr-2"></i>Execute Endpoint Evaluation
+                </button>
+                
+                <div id="responseArea" class="mt-6 hidden">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Response Stream Packet Output</label>
+                    <pre class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs max-h-64 overflow-y-auto"><code id="responseContent" class="text-emerald-400"></code></pre>
+                </div>
             </div>
         </div>
     </div>
@@ -169,13 +121,18 @@ print(response.json())</code></pre>
 async function testChatAPI() {
     const apiKey = document.getElementById('apiKeyInput').value;
     const message = document.getElementById('messageInput').value;
+    const responseArea = document.getElementById('responseArea');
+    const responseContent = document.getElementById('responseContent');
     
     if (!apiKey) {
-        alert('Please enter your API key');
+        alert('Credentials required context dropped.');
         return;
     }
     
     try {
+        responseContent.textContent = "Processing active connection vectors...";
+        responseArea.classList.remove('hidden');
+        
         const response = await axios.post('/api/chat', {
             messages: [{ role: 'user', content: message }],
             temperature: 0.7
@@ -186,13 +143,9 @@ async function testChatAPI() {
             }
         });
         
-        const responseArea = document.getElementById('responseArea');
-        const responseContent = document.getElementById('responseContent');
-        
         responseContent.textContent = JSON.stringify(response.data, null, 2);
-        responseArea.classList.remove('hidden');
     } catch (error) {
-        alert('Error: ' + (error.response?.data?.message || error.message));
+        responseContent.textContent = "Error: " + (error.response?.data?.message || error.message);
     }
 }
 </script>

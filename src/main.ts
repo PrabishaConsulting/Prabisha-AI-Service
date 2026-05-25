@@ -201,9 +201,6 @@ async function bootstrap() {
   
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  console.log(`Application running on: http://localhost:3000`);
-  console.log(`Login page: http://localhost:3000/auth/login`);
-  console.log(`Admin dashboard: http://localhost:3000/admin/dashboard`);
 }
 
 bootstrap();

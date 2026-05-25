@@ -1,134 +1,109 @@
-<!-- views/layouts/docs.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}} | AI Gateway</title>
+    <title>{{title}} | AI Gateway Docs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPrimary: '#111CA8',
+                        brandAccent: '#DE6A2C',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        pre {
-            background: #1e1e1e;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
+        pre code.hljs {
+            padding: 1.25rem;
+            background: #0f172a !important;
+            border-radius: 0.75rem;
+            border: 1px solid #334155;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
-        code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-        .api-endpoint {
-            background: #f3f4f6;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+        code:not(pre code) {
             font-family: monospace;
-            font-weight: bold;
-        }
-        .method-post { color: #10b981; }
-        .method-get { color: #3b82f6; }
-        .method-delete { color: #ef4444; }
-        .nav-link {
-            transition: all 0.2s;
-        }
-        .nav-link:hover {
-            color: #8b5cf6;
-            border-left-color: #8b5cf6;
-        }
-        .try-it-out {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .response-area {
-            max-height: 400px;
-            overflow-y: auto;
+            font-size: 0.875rem;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            border: 1px solid #e2e8f0;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-8">
-                    <a href="/docs" class="flex items-center space-x-2">
-                        <i class="fas fa-robot text-purple-600 text-2xl"></i>
-                        <span class="font-bold text-xl text-gray-800">AI Gateway</span>
-                    </a>
-                    <div class="hidden md:flex space-x-6">
-                        <a href="/docs" class="text-gray-600 hover:text-purple-600">Documentation</a>
-                        <a href="/docs/authentication" class="text-gray-600 hover:text-purple-600">Authentication</a>
-                        <a href="/docs/chat" class="text-gray-600 hover:text-purple-600">Chat API</a>
-                        <a href="/docs/image" class="text-gray-600 hover:text-purple-600">Image API</a>
-                        <a href="/docs/rate-limits" class="text-gray-600 hover:text-purple-600">Rate Limits</a>
-                    </div>
-                </div>
-                <div>
-                    <a href="/auth/login" class="text-purple-600 hover:text-purple-700 font-medium">
-                        <i class="fas fa-key mr-1"></i>Get API Key
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <div class="flex flex-col lg:flex-row gap-8">
-            <!-- Sidebar -->
+    {{> public_header}}
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="flex flex-col lg:flex-row gap-10">
+            
             <aside class="lg:w-1/4">
-                <div class="sticky top-8">
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <h3 class="font-semibold text-gray-800 mb-3">Getting Started</h3>
-                        <ul class="space-y-2">
+                <div class="sticky top-24 space-y-8 bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Getting Started</h3>
+                        <ul class="space-y-1.5 border-l border-slate-100 pl-1">
                             <li>
-                                <a href="/docs#introduction" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Introduction
                                 </a>
                             </li>
                             <li>
-                                <a href="/docs/authentication" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs/authentication" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Authentication
                                 </a>
                             </li>
                             <li>
-                                <a href="/docs/rate-limits" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs/rate-limits" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Rate Limits
                                 </a>
                             </li>
                         </ul>
-                        
-                        <h3 class="font-semibold text-gray-800 mt-6 mb-3">API Endpoints</h3>
-                        <ul class="space-y-2">
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Core API Endpoints</h3>
+                        <ul class="space-y-1.5 border-l border-slate-100 pl-1">
                             <li>
-                                <a href="/docs/chat" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs/chat" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Chat Completion
                                 </a>
                             </li>
                             <li>
-                                <a href="/docs/image" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs/image" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Image Generation
                                 </a>
                             </li>
                             <li>
-                                <a href="/docs/embeddings" class="text-gray-600 hover:text-purple-600 block py-1">
+                                <a href="/docs/embeddings" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
                                     Embeddings
                                 </a>
                             </li>
                         </ul>
-                        
-                        <h3 class="font-semibold text-gray-800 mt-6 mb-3">Resources</h3>
-                        <ul class="space-y-2">
+                    </div>
+
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Resources</h3>
+                        <ul class="space-y-1.5 border-l border-slate-100 pl-1">
                             <li>
-                                <a href="#support" class="text-gray-600 hover:text-purple-600 block py-1">
-                                    Support
+                                <a href="#support" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
+                                    Support Queue
                                 </a>
                             </li>
                             <li>
-                                <a href="#pricing" class="text-gray-600 hover:text-purple-600 block py-1">
-                                    Pricing
+                                <a href="#pricing" class="block py-1.5 px-3 text-sm font-medium text-slate-600 rounded-md hover:text-slate-950 hover:bg-slate-50 transition-all">
+                                    Token Pricing
                                 </a>
                             </li>
                         </ul>
@@ -136,24 +111,31 @@
                 </div>
             </aside>
 
-            <!-- Content -->
-            <article class="lg:w-3/4">
-                <div class="bg-white rounded-lg shadow-sm p-8">
+            <article class="lg:w-3/4 min-w-0">
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-8 lg:p-12 shadow-sm">
                     {{{body}}}
                 </div>
             </article>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
-        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>&copy; 2024 AI Gateway - All rights reserved</p>
-        </div>
+    <footer class="bg-white border-t border-slate-100 mt-24 py-8 text-center text-xs text-slate-400">
+        <p>&copy; 2026 AI Gateway • Engineered for microservice orchestration structures.</p>
     </footer>
 
     <script>
-        hljs.highlightAll();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Highlight execution paths matching window locations
+            const currentPath = window.location.pathname + window.location.hash;
+            document.querySelectorAll('aside a').forEach(link => {
+                if(link.getAttribute('href') === currentPath || (currentPath === '/docs' && link.getAttribute('href') === '/docs#introduction')) {
+                    link.classList.remove('text-slate-600', 'hover:text-slate-950');
+                    link.classList.add('text-slate-950', 'bg-slate-50', 'font-semibold', 'border-l-2');
+                    link.style.borderColor = '#111CA8';
+                }
+            });
+            hljs.highlightAll();
+        });
     </script>
 </body>
 </html>

@@ -1,83 +1,112 @@
-<div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-800">Analytics</h2>
+<div class="space-y-8">
+    <div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900">System Analytics & Resource Usage</h2>
+        <p class="text-sm text-slate-500 mt-0.5">Deep telemetry auditing across token throughput volume and usage curves.</p>
+    </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="card p-6">
-            <h3 class="text-lg font-semibold mb-4">30-Day Usage Trend</h3>
-            <canvas id="trendChart" height="300"></canvas>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm lg:col-span-2">
+            <h3 class="text-sm font-bold text-slate-800 mb-4 tracking-tight">30-Day Cumulative Request Trends</h3>
+            <div class="h-72 relative">
+                <canvas id="trendChart"></canvas>
+            </div>
         </div>
         
-        <div class="card p-6">
-            <h3 class="text-lg font-semibold mb-4">Provider Usage Distribution</h3>
-            <canvas id="distChart" height="300"></canvas>
+        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-800 mb-4 tracking-tight">Provider Load Volume Share</h3>
+            <div class="h-72 relative">
+                <canvas id="distChart"></canvas>
+            </div>
         </div>
     </div>
     
-    <div class="card p-6">
-        <h3 class="text-lg font-semibold mb-4">Top Users by Usage</h3>
-        <div class="table-container">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Calls</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Tokens</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estimated Cost</th>
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+            <h3 class="text-sm font-bold text-slate-800 tracking-tight">Top Consumers Grouped by Token Allocation Volume</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-xs">
+                        <th class="px-6 py-3.5">Account Identity Reference</th>
+                        <th class="px-6 py-3.5">Total Success Requests</th>
+                        <th class="px-6 py-3.5">Aggregated Tokens Count</th>
+                        <th class="px-6 py-3.5 text-right">Computed Cost Overhead</th>
                     </tr>
                 </thead>
-                <tbody id="topUsersTable">
-                    <!-- Filled by JavaScript -->
-                </tbody>
+                <tbody id="topUsersTable" class="divide-y divide-slate-100 text-slate-600 font-medium">
+                    </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-// Load analytics data
-fetch('/admin/api/analytics/stats')
-    .then(res => res.json())
-    .then(data => {
-        // Trend Chart
-        new Chart(document.getElementById('trendChart'), {
-            type: 'line',
-            data: {
-                labels: data.dailyLabels,
-                datasets: [{
-                    label: 'Requests',
-                    data: data.dailyCounts,
-                    borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: true }
-        });
-        
-        // Distribution Chart
-        new Chart(document.getElementById('distChart'), {
-            type: 'doughnut',
-            data: {
-                labels: data.providerLabels,
-                datasets: [{
-                    data: data.providerCounts,
-                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6']
-                }]
-            }
-        });
-        
-        // Top Users Table
-        const tbody = document.getElementById('topUsersTable');
-        data.topUsers.forEach(user => {
-            tbody.innerHTML += `
-                <tr>
-                    <td class="px-6 py-4">${user.email}</td>
-                    <td class="px-6 py-4">${user.totalCalls}</td>
-                    <td class="px-6 py-4">${user.totalTokens}</td>
-                    <td class="px-6 py-4">$${user.totalCost.toFixed(2)}</td>
-                </tr>
-            `;
-        });
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/admin/api/analytics/stats')
+            .then(res => res.json())
+            .then(data => {
+                // Redesigned 30-Day Trend Tracking Array Mapping
+                const trendCtx = document.getElementById('trendChart').getContext('2d');
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.dailyLabels,
+                        datasets: [{
+                            label: 'Requests Count',
+                            data: data.dailyCounts,
+                            borderColor: '#DE6A2C', // Dynamic brand accent color choice over graph lines
+                            backgroundColor: 'rgba(222, 106, 44, 0.02)',
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            tension: 0.2,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                        }
+                    }
+                });
+                
+                // Optimized Distribution Share Matrix Mapping
+                const distCtx = document.getElementById('distChart').getContext('2d');
+                new Chart(distCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.providerLabels,
+                        datasets: [{
+                            data: data.providerCounts,
+                            backgroundColor: ['#111CA8', '#DE6A2C', '#1e293b', '#475569', '#94a3b8']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } },
+                        cutout: '78%'
+                    }
+                });
+                
+                // Core Document Fragment Table Rendering
+                const tbody = document.getElementById('topUsersTable');
+                tbody.innerHTML = ''; // Sanitize container footprint safely prior loops execution
+                data.topUsers.forEach(user => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 text-slate-900 font-semibold text-xs">${user.email}</td>
+                            <td class="px-6 py-4 font-mono text-xs font-bold text-slate-700">${Number(user.totalCalls).toLocaleString()}</td>
+                            <td class="px-6 py-4 font-mono text-xs text-slate-500">${Number(user.totalTokens).toLocaleString()}</td>
+                            <td class="px-6 py-4 text-right font-mono text-xs font-black text-slate-900">$${Number(user.totalCost).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(err => console.error('Metrics extraction connection failure tracking:', err));
     });
 </script>
