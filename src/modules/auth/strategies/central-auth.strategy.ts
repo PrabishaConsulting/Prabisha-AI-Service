@@ -32,12 +32,20 @@ export class CentralAuthStrategy extends PassportStrategy(Strategy, 'central-aut
     console.log('Central URL:', centralUrl);
     console.log('Client ID:', configService.get('CENTRAL_CLIENT_ID'));
 
+    // Determine the exact callback URL string based on the current environment
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cleanCallbackUrl = isProduction 
+      ? 'https://aiservice.prabisha.com/auth/callback' 
+      : (configService.get('CENTRAL_CALLBACK_URL') || 'http://localhost:3000/auth/callback');
+
+    console.log('Enforced Callback URL Strategy Target:', cleanCallbackUrl);
+
     super({
       authorizationURL: `${centralUrl}/oidc/authorize`,
       tokenURL: `${centralUrl}/oidc/token`,
       clientID: configService.get('CENTRAL_CLIENT_ID')!,
       clientSecret: clientSecret,
-      callbackURL: configService.get('CENTRAL_CALLBACK_URL'),
+      callbackURL: cleanCallbackUrl, // ← Hardcoded target fallback ensuring zero dynamic parameter corruption
       scope: ['openid', 'email', 'profile'],
       state: true,
       pkce: true,
@@ -121,7 +129,7 @@ export class CentralAuthStrategy extends PassportStrategy(Strategy, 'central-aut
         role: decoded.role,
       };
     } catch (verifyError) {
-      console.warn('JWT verify failed, trying unverified decode:', verifyError.message);
+      console.warn('JWT verify failed, trying unverified decode:', verifyError);
     }
 
     // Fallback: decode without verification
@@ -138,7 +146,7 @@ export class CentralAuthStrategy extends PassportStrategy(Strategy, 'central-aut
         };
       }
     } catch (decodeError) {
-      console.error('JWT decode failed:', decodeError.message);
+      console.error('JWT decode failed:', decodeError);
     }
 
     return null;
