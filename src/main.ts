@@ -9,9 +9,15 @@ import passport from 'passport';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // ==========================================
+  // CRITICAL PROXIES FIX FOR PM2 / PRODUCTION
+  // ==========================================
+  // This MUST be set before express-session or passport initialize!
+  app.set('trust proxy', 1);
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  // Session configuration (from your working project)
+  // Session configuration (Now safely trusts proxy for HTTPS secure cookies)
   app.use(
     session({
       name: 'AI_GATEWAY_SESSION',
@@ -36,13 +42,12 @@ async function bootstrap() {
   // Passport initialization
   app.use(passport.initialize());
   app.use(passport.session());
-  app.set('trust proxy', 1);
 
   // Setup views and static files
   const viewsDir = join(process.cwd(), 'views');
   const publicDir = join(process.cwd(), 'public');
 
-  // Register helpers using the hbs instance (your working method)
+  // Register helpers using the hbs instance
   const hbs = require('hbs');
   
   // Register partials
@@ -106,22 +111,20 @@ async function bootstrap() {
     return str.substring(0, length) + '...';
   });
 
-  // NEW: avatarColor helper - generates consistent colors for user avatars
+  // avatarColor helper - generates consistent colors for user avatars
   hbs.registerHelper('avatarColor', (email) => {
     if (!email) return '#8b5cf6'; // Default purple color
     
-    // Generate a consistent color based on email string
     let hash = 0;
     for (let i = 0; i < email.length; i++) {
       hash = email.charCodeAt(i) + ((hash << 5) - hash);
     }
     
-    // Generate HSL color with good saturation and lightness
     const hue = Math.abs(hash % 360);
     return `hsl(${hue}, 70%, 60%)`;
   });
 
-  // NEW: formatStatus helper for better status display
+  // formatStatus helper for better status display
   hbs.registerHelper('formatStatus', (status) => {
     const statusMap: Record<string, string> = {
       SUCCESS: 'Success',
@@ -138,34 +141,34 @@ async function bootstrap() {
     return statusMap[status] || status;
   });
 
-  // NEW: percentage helper for calculations
+  // percentage helper for calculations
   hbs.registerHelper('percentage', (value, total) => {
     if (!total || total === 0) return '0%';
     const percent = (value / total) * 100;
     return `${Math.round(percent)}%`;
   });
 
-  // NEW: multiply helper for calculations
+  // multiply helper for calculations
   hbs.registerHelper('multiply', (a, b) => {
     return a * b;
   });
 
-  // NEW: subtract helper for calculations
+  // subtract helper for calculations
   hbs.registerHelper('subtract', (a, b) => {
     return a - b;
   });
 
-  // NEW: or helper for conditional logic
+  // or helper for conditional logic
   hbs.registerHelper('or', (a, b) => {
     return a || b;
   });
 
-  // NEW: and helper for conditional logic
+  // and helper for conditional logic
   hbs.registerHelper('and', (a, b) => {
     return a && b;
   });
 
-  // NEW: formatCost helper for displaying currency
+  // formatCost helper for displaying currency
   hbs.registerHelper('formatCost', (cost) => {
     if (!cost && cost !== 0) return '$0.00';
     return `$${cost.toFixed(4)}`;
@@ -179,7 +182,6 @@ async function bootstrap() {
       'MISTRAL': 'fa-wind',
       'COHERE': 'fa-coins',
     };
-    // FontAwesome 6 brands framework uses 'fab' prefix for specific brand icons
     const icon = icons[providerName] || 'fa-cloud';
     const prefix = ['fa-openai', 'fa-google'].includes(icon) ? 'fab' : 'fas';
     
@@ -197,9 +199,6 @@ async function bootstrap() {
   app.setViewEngine('hbs');
   app.useStaticAssets(publicDir);
 
-  // IMPORTANT: DO NOT set global prefix for views
-  // Only prefix API routes, but we'll handle that in controllers
-  
   const port = process.env.PORT || 3000;
   await app.listen(port);
 }
