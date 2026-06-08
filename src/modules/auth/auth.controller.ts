@@ -37,7 +37,7 @@ export class AuthController {
       console.error('No user in request after OAuth callback');
       return res.redirect('/auth/central?error=auth_failed');
     }
-    
+    console.log(req);
     // Store user in session
     req.session.user = req.user;
     req.session.save((err) => {
