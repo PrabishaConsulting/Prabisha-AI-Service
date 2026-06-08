@@ -36,6 +36,7 @@ async function bootstrap() {
   // Passport initialization
   app.use(passport.initialize());
   app.use(passport.session());
+  app.set('trust proxy', 1);
 
   // Setup views and static files
   const viewsDir = join(process.cwd(), 'views');
