@@ -1,4 +1,5 @@
 // src/modules/providers/adapters/gemini.adapter.ts
+import * as dns from 'dns';
 import { Injectable } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
 import {
@@ -13,6 +14,8 @@ import {
 import { ProviderName, Modality } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AdminService } from '../../admin/admin.service'; // 1. Import AdminService
+
+dns.setDefaultResultOrder('ipv4first');
 
 @Injectable()
 export class GeminiProvider implements AIProvider {
