@@ -16,4 +16,9 @@ export class AppController {
   getHome() {
     return { title: 'AI Gateway - Unified API' };
   }
+
+  @Get("/debug-sentry")
+  getError() {
+    throw new Error("My first Sentry error!");
+  }
 }
