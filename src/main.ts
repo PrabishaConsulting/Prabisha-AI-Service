@@ -1,10 +1,11 @@
+import "./instrument";
+import { join } from 'path';
+import passport from 'passport';
+import session from 'express-session';
+import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
-import { AppModule } from './app.module';
-import session from 'express-session';
-import passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

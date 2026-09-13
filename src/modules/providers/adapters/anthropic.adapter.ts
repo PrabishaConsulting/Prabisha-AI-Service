@@ -4,29 +4,33 @@ import Anthropic from '@anthropic-ai/sdk';
 import { AIProvider, ChatRequest, ChatResponse } from '../provider.interface';
 import { ProviderName, Modality } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AdminService } from '../../admin/admin.service';
 
 @Injectable()
 export class AnthropicProvider implements AIProvider {
-  private client: Anthropic | null = null;
   name = ProviderName.ANTHROPIC;
 
-  constructor(private prisma: PrismaService) {
-    this.initializeClient();
-  }
+  constructor(
+    private prisma: PrismaService,
+    private adminService: AdminService,
+  ) {}
 
-  private async initializeClient() {
+  private async getClient(): Promise<Anthropic> {
     const provider = await this.prisma.provider.findUnique({
       where: { name: ProviderName.ANTHROPIC },
     });
-    
-    if (provider && provider.encryptedKey) {
-      const apiKey = this.decryptKey(provider.encryptedKey);
-      this.client = new Anthropic({ apiKey });
-    }
-  }
 
-  private decryptKey(encryptedKey: string): string {
-    return encryptedKey; // Implement proper decryption
+    if (!provider?.encryptedKey) {
+      throw new Error('Anthropic API key is not configured in the Admin Panel.');
+    }
+
+    const apiKey = await this.adminService.decryptApiKey(
+      provider.encryptedKey,
+      provider.keyIv,
+      provider.keyTag,
+    );
+
+    return new Anthropic({ apiKey });
   }
 
   supportsModality(modality: Modality): boolean {
@@ -35,30 +39,32 @@ export class AnthropicProvider implements AIProvider {
 
   async chat(request: ChatRequest): Promise<ChatResponse> {
     const startTime = Date.now();
-    
-    // Convert OpenAI format to Anthropic format
+    const client = await this.getClient();
     const systemMessage = request.messages.find(m => m.role === 'system');
     const userMessages = request.messages.filter(m => m.role !== 'system');
-    
-    if (!this.client) {
-      throw new Error('Anthropic API client is not initialized.');
+
+    if (userMessages.length === 0) {
+      throw new Error('Anthropic chat requests must contain at least one user or assistant message.');
     }
 
-    const response = await this.client.messages.create({
-      model: request.model || 'claude-3-sonnet-20241022',
+    const response = await client.messages.create({
+      model: request.model ?? 'claude-3-5-sonnet-20241022',
       system: systemMessage?.content,
       messages: userMessages.map(m => ({
         role: m.role === 'assistant' ? 'assistant' : 'user',
         content: m.content,
       })),
-      max_tokens: request.maxTokens || 1024,
-      temperature: request.temperature || 0.7,
+      max_tokens: request.maxTokens ?? 1024,
+      temperature: request.temperature ?? 0.7,
     });
 
     const latency = Date.now() - startTime;
 
     return {
-      content: response.content[0].type === 'text' ? response.content[0].text : '',
+      content: response.content
+        .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+        .map(block => block.text)
+        .join(''),
       model: response.model,
       providerName: this.name,
       usage: {
