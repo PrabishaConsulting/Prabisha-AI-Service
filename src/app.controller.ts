@@ -19,6 +19,6 @@ export class AppController {
 
   @Get("/debug-sentry")
   getError() {
-    throw new Error("My first Sentry error!");
+    return { status: "Sentry debug endpoint reached. Error throw is disabled." };
   }
 }
