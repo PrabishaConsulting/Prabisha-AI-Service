@@ -72,7 +72,7 @@ export interface EmbeddingResponse {
 }
 
 export interface DocumentParseRequest {
-  base64Data: string;
+  file: Buffer;
   mimeType: string;
   prompt?: string;
   model?: string;

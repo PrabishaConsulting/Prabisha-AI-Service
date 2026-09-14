@@ -142,7 +142,7 @@ Rules:
       contents: [{
         role: 'user',
         parts: [
-          { inlineData: { mimeType: request.mimeType, data: request.base64Data } },
+          { inlineData: { mimeType: request.mimeType, data: request.file.toString('base64') } },
           { text: request.prompt?.trim() || GeminiProvider.extractionPrompt },
         ],
       }],
