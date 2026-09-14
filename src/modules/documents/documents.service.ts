@@ -11,11 +11,11 @@ export class DocumentsService {
   ) {}
 
   async parseDocument(
-    data: { base64Data: string; mimeType: string; prompt?: string; model?: string },
+    data: { file: Buffer; mimeType: string; prompt?: string; model?: string },
     userId: string,
     apiKeyId: string,
   ) {
-    if (!data.base64Data || !data.mimeType) {
+    if (!data.file?.length || !data.mimeType) {
       throw new BadRequestException('Missing required fields for document parsing');
     }
     if (data.mimeType !== 'application/pdf') {
