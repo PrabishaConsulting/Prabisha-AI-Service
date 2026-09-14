@@ -14,6 +14,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { DocsModule } from './modules/docs/docs.module';
 import { ImageModule } from './modules/image/image.module';
 import { EmbeddingsModule } from './modules/embeddings/embeddings.module';
+import { DocumentsModule } from './modules/documents/documents.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -43,6 +44,7 @@ import { AppService } from './app.service';
     DocsModule,
     ImageModule,
     EmbeddingsModule,
+    DocumentsModule,
     ChatModule,
     ProvidersModule,
     UsageModule,
