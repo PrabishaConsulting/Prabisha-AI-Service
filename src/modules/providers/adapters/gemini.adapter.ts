@@ -25,27 +25,6 @@ dns.setDefaultResultOrder('ipv4first');
 export class GeminiProvider implements AIProvider {
   name = ProviderName.GEMINI;
 
-  private static readonly extractionPrompt = `
-You are a document extraction assistant. Extract the text content from this PDF.
-
-Return a JSON array where each element represents ONE page:
-[
-  {
-    "page": 1,
-    "content": "Full readable text of the page, preserving paragraphs and structure",
-    "pageContext": "Optional brief summary if the page contains mostly tables/images"
-  }
-]
-
-Rules:
-- "page" is 1-based.
-- "content" must contain ALL readable text on that page, including headings, body text, list items, and table cell values. Do NOT truncate.
-- For pages that are mostly images with little text, describe the visual content in "content".
-- For tables, convert them to readable prose: "Column A: val1, Column B: val2".
-- Preserve paragraph breaks with \\n+\\n.
-- Return ONLY the raw JSON array. No markdown fences, no explanation.
-`.trim();
-
   constructor(
     private prisma: PrismaService,
     private adminService: AdminService // 2. Inject AdminService
@@ -137,70 +116,58 @@ Rules:
     const client = await this.getClient();
     const targetModel = request.model || 'gemini-2.5-flash';
     const startTime = Date.now();
-    const response = await client.models.generateContent({
+    const interaction = await client.interactions.create({
       model: targetModel,
-      contents: [{
-        role: 'user',
-        parts: [
-          { inlineData: { mimeType: request.mimeType, data: request.file.toString('base64') } },
-          { text: request.prompt?.trim() || GeminiProvider.extractionPrompt },
-        ],
-      }],
-      config: { temperature: 0.1 },
+      input: [
+        {
+          type: 'document',
+          data: request.file.toString('base64'),
+          mime_type: 'application/pdf',
+        },
+        {
+          type: 'text',
+          text: request.prompt?.trim() || 'Extract and return the complete content of this document.',
+        },
+      ],
     });
 
-    const rawText = (response.text || '').replace(/```json|```/gi, '').trim();
+    const rawText = interaction.output_text?.trim() || '';
     if (!rawText) throw new Error('Gemini returned an empty response');
 
-    const pages = this.parsePages(rawText);
-    const chunks = pages.flatMap((page) => this.chunkPage(page, pages.length));
-    if (chunks.length === 0) throw new Error('No text could be extracted from this PDF');
+    const page: ExtractedPage = {
+      page: 1,
+      content: rawText,
+    };
+    const pages = [page];
+    const chunks = this.chunkPage(page, 1);
+    const fullText = rawText;
+    const usage = interaction.usage as {
+      total_input_tokens?: number;
+      total_output_tokens?: number;
+      total_tokens?: number;
+    } | undefined;
 
-    const fullText = pages.map((page) => page.content.trim()).filter(Boolean).join('\n\n');
     return {
       pages,
       chunks,
       fullText,
       metadata: {
-        pageCount: pages.length,
+        pageCount: 1,
         wordCount: this.countWords(fullText),
         extractedAt: new Date().toISOString(),
         fileType: request.mimeType,
         chunkCount: chunks.length,
-        extractionMethod: 'gemini',
+        extractionMethod: 'gemini-interactions',
       },
       model: targetModel,
       providerName: this.name,
       usage: {
-        promptTokens: response.usageMetadata?.promptTokenCount || 0,
-        completionTokens: response.usageMetadata?.candidatesTokenCount || 0,
-        totalTokens: response.usageMetadata?.totalTokenCount || 0,
+        promptTokens: usage?.total_input_tokens || 0,
+        completionTokens: usage?.total_output_tokens || 0,
+        totalTokens: usage?.total_tokens || 0,
       },
       latency: Date.now() - startTime,
     };
-  }
-
-  private parsePages(rawText: string): ExtractedPage[] {
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(rawText);
-    } catch (error) {
-      throw new Error(`Gemini returned invalid JSON: ${error instanceof Error ? error.message : String(error)}`);
-    }
-
-    if (!Array.isArray(parsed)) throw new Error('Gemini did not return a JSON array');
-
-    return parsed.map((page, index) => {
-      if (!page || typeof page !== 'object' || typeof (page as ExtractedPage).content !== 'string') {
-        throw new Error(`Gemini returned an invalid page at index ${index}`);
-      }
-      const extractedPage = page as ExtractedPage;
-      return {
-        page: typeof extractedPage.page === 'number' ? extractedPage.page : index + 1,
-        content: extractedPage.content,
-        pageContext: typeof extractedPage.pageContext === 'string' ? extractedPage.pageContext : undefined,
-      };
-    });
   }
 
   private chunkPage(page: ExtractedPage, totalPages: number): DocumentChunk[] {

@@ -24,7 +24,7 @@ export class DocumentsService {
 
     try {
       const response = await this.providerRouter.routeDocumentRequest(data);
-      await this.usageQueue.add('track-usage', {
+      void this.usageQueue.add('track-usage', {
         userId,
         apiKeyId,
         endpoint: '/documents/parse',
@@ -36,6 +36,8 @@ export class DocumentsService {
         providerModelId: response.providerModelId,
         modality: 'TEXT',
         fallbackChain: response.fallbackChain,
+      }).catch((error) => {
+        console.error('Document usage tracking failed:', error);
       });
 
       return { success: true, ...response };
