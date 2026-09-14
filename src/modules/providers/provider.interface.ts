@@ -71,6 +71,50 @@ export interface EmbeddingResponse {
   latency?: number;
 }
 
+export interface DocumentParseRequest {
+  base64Data: string;
+  mimeType: string;
+  prompt?: string;
+  model?: string;
+}
+
+export interface ExtractedPage {
+  page: number;
+  content: string;
+  pageContext?: string;
+}
+
+export interface DocumentChunk extends ExtractedPage {
+  chunkIndex: number;
+  totalChunksOnPage: number;
+  totalPages: number;
+}
+
+export interface DocumentParseResponse {
+  pages: ExtractedPage[];
+  chunks: DocumentChunk[];
+  fullText: string;
+  metadata: {
+    pageCount: number;
+    wordCount: number;
+    extractedAt: string;
+    fileType: string;
+    chunkCount: number;
+    extractionMethod: string;
+  };
+  model: string;
+  providerName: ProviderName;
+  providerId?: string;
+  providerModelId?: string;
+  usage: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+  latency: number;
+  fallbackChain?: string[];
+}
+
 export interface AIProvider {
   name: ProviderName;
   chat(request: ChatRequest): Promise<ChatResponse>;
@@ -78,5 +122,6 @@ export interface AIProvider {
   generateImage?(request: ImageGenerationRequest): Promise<ImageGenerationResponse>;
   generateVideo?(request: VideoGenerationRequest): Promise<VideoGenerationResponse>;
   generateEmbeddings?(request: EmbeddingRequest): Promise<EmbeddingResponse>;
+  parseDocument?(request: DocumentParseRequest): Promise<DocumentParseResponse>;
   supportsModality(modality: Modality): boolean;
 }

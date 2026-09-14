@@ -13,6 +13,8 @@ import {
   EmbeddingResponse,
   ImageGenerationRequest,
   ImageGenerationResponse,
+  DocumentParseRequest,
+  DocumentParseResponse,
 } from './provider.interface';
 
 @Injectable()
@@ -220,6 +222,47 @@ export class ProviderRouterService {
       throw new Error(
         `Provider ${selectedModel.provider.name} embedding generation failed: ${error?.message ?? error}`,
       );
+    }
+  }
+
+  async routeDocumentRequest(
+    request: DocumentParseRequest,
+    preferredProvider: ProviderName = ProviderName.GEMINI,
+  ): Promise<DocumentParseResponse> {
+    const selectedModel = await this.prisma.providerModel.findFirst({
+      where: {
+        ...(request.model ? { modelId: request.model } : { modality: Modality.TEXT }),
+        isEnabled: true,
+        provider: {
+          name: preferredProvider,
+          isEnabled: true,
+          status: 'ACTIVE',
+        },
+      },
+      include: { provider: true },
+      orderBy: request.model ? undefined : [{ isDefault: 'desc' }],
+    });
+
+    if (!selectedModel || selectedModel.modality !== Modality.TEXT) {
+      throw new Error(`No active Gemini document model found${request.model ? `: ${request.model}` : ''}`);
+    }
+
+    const provider = this.providers.get(selectedModel.provider.name);
+    if (!provider?.supportsModality(Modality.TEXT) || !provider.parseDocument) {
+      throw new Error(`Provider ${selectedModel.provider.name} does not support document parsing`);
+    }
+
+    try {
+      const response = await provider.parseDocument({ ...request, model: selectedModel.modelId });
+      return {
+        ...response,
+        providerId: selectedModel.provider.id,
+        providerModelId: selectedModel.id,
+        fallbackChain: [selectedModel.provider.name],
+      };
+    } catch (error) {
+      this.logger.error(`${selectedModel.provider.name} document parsing failed: ${error?.message ?? error}`);
+      throw new Error(`Provider ${selectedModel.provider.name} document parsing failed: ${error?.message ?? error}`);
     }
   }
 }
