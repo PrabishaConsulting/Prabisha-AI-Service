@@ -36,6 +36,11 @@ import { AppService } from './app.service';
       redis: {
         host: process.env.REDIS_HOST || 'localhost',
         port: parseInt(process.env.REDIS_PORT || '6379'),
+        username: process.env.REDIS_USERNAME || undefined,
+        password: process.env.REDIS_PASSWORD || undefined,
+        maxRetriesPerRequest: 1,
+        connectTimeout: 5000,
+        ...(process.env.REDIS_TLS === 'true' ? { tls: {} } : {}),
       },
     }),
     PrismaModule,
