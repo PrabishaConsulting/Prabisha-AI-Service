@@ -29,7 +29,7 @@ export class DocumentsController {
       { file: file.buffer, mimeType: file.mimetype, ...body },
       req.user.id,
       req.user.apiKeyId,
-      req.headers.origin || req.headers.referer || req.headers['x-client-origin'],
+      req.headers['x-client-origin'] || req.headers.origin || req.headers.referer,
       req.ip || req.socket.remoteAddress,
     );
   }
