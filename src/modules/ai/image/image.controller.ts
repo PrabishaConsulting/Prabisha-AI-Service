@@ -11,7 +11,7 @@ export class ImageController {
 
   @Post()
   async create(@Body() createImageDto: CreateImageDto, @Req() req: any) {
-    const requestOriginUrl = req.headers.origin || req.headers.referer || req.headers['x-client-origin'];
+    const requestOriginUrl = req.headers['x-client-origin'] || req.headers.origin || req.headers.referer;
     return this.imageService.create(
       createImageDto,
       req.user.id,

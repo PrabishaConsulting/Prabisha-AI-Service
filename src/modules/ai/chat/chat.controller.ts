@@ -17,7 +17,7 @@ export class ChatController {
     @Req() req: any,
     @Headers('x-api-key') apiKey: string,
   ) {
-    const requestOriginUrl = req.headers.origin || req.headers.referer || req.headers['x-client-origin'];
+    const requestOriginUrl = req.headers['x-client-origin'] || req.headers.origin || req.headers.referer;
     const result = await this.chatService.processChat(
       request,
       req.user.id,
