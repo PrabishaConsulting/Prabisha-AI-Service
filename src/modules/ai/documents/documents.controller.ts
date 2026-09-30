@@ -2,7 +2,7 @@
 import { Controller, Post, Body, UseGuards, Req, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DocumentsService } from './documents.service';
-import { ApiKeyGuard } from '../auth/guards/api-key.guard';
+import { ApiKeyGuard } from '../../auth/guards/api-key.guard';
 import { ParseDocumentDto } from './dto/parse-document';
 
 @Controller('documents')
@@ -28,7 +28,9 @@ export class DocumentsController {
     return this.documentsService.parseDocument(
       { file: file.buffer, mimeType: file.mimetype, ...body },
       req.user.id,
-      req.user.apiKeyId
+      req.user.apiKeyId,
+      req.headers.origin || req.headers.referer || req.headers['x-client-origin'],
+      req.ip || req.socket.remoteAddress,
     );
   }
 }

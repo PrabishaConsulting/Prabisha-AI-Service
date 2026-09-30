@@ -7,42 +7,53 @@
                 <path d="M2 12l10 5 10-5"/>
             </svg>
         </div>
-        <div>
+        <div class="sidebar-brand-copy">
             <h1>Admin Panel</h1>
             <p>Dashboard Overview</p>
         </div>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Collapse sidebar" aria-controls="sidebar" aria-expanded="true" title="Collapse sidebar">
+            <i class="fas fa-angles-left" aria-hidden="true"></i>
+        </button>
     </div>
 
     <nav class="sidebar-nav">
         <div class="nav-section-label">Menu</div>
-        <a class="nav-link {{#if activeDashboard}}active{{/if}}" href="/admin/dashboard">
-            <i class="fas fa-chart-line"></i> Dashboard
+        <a class="nav-link {{#if active.dashboard}}active{{/if}}" href="/admin/dashboard" title="Dashboard" aria-label="Dashboard">
+            <i class="fas fa-chart-line" aria-hidden="true"></i><span class="nav-link-text">Dashboard</span>
         </a>
-        <a class="nav-link {{#if activeApplications}}active{{/if}}" href="/admin/api-keys">
-            <i class="fas fa-key"></i> API Keys
+        <a class="nav-link {{#if active.apiKeys}}active{{/if}}" href="/admin/api-keys" title="API Keys" aria-label="API Keys">
+            <i class="fas fa-key" aria-hidden="true"></i><span class="nav-link-text">API Keys</span>
         </a>
-        <a class="nav-link {{#if activeUsers}}active{{/if}}" href="/admin/users">
-            <i class="fas fa-users"></i> Users
+        <a class="nav-link {{#if active.users}}active{{/if}}" href="/admin/users" title="Users" aria-label="Users">
+            <i class="fas fa-users" aria-hidden="true"></i><span class="nav-link-text">Users</span>
         </a>
-        <a class="nav-link {{#if activeSettings}}active{{/if}}" href="/admin/providers">
-            <i class="fas fa-robot"></i> Providers
+        <a class="nav-link {{#if active.providers}}active{{/if}}" href="/admin/providers" title="Providers" aria-label="Providers">
+            <i class="fas fa-robot" aria-hidden="true"></i><span class="nav-link-text">Providers</span>
         </a>
-        <a class="nav-link {{#if activeSettings}}active{{/if}}" href="/admin/analytics">
-            <i class="fas fa-chart-pie"></i> Analytics
+        <a class="nav-link {{#if active.analytics}}active{{/if}}" href="/admin/analytics" title="Analytics" aria-label="Analytics">
+            <i class="fas fa-chart-pie" aria-hidden="true"></i><span class="nav-link-text">Analytics</span>
         </a>
-        <a class="nav-link {{#if activeUsageLogs}}active{{/if}}" href="/admin/usage-logs">
-            <i class="fas fa-list-alt"></i> Usage Logs
+        <a class="nav-link {{#if active.usageLogs}}active{{/if}}" href="/admin/usage-logs" title="Usage Logs" aria-label="Usage Logs">
+            <i class="fas fa-list-alt" aria-hidden="true"></i><span class="nav-link-text">Usage Logs</span>
         </a>
     </nav>
 
     <div class="sidebar-footer">
         <div class="sidebar-user">
-            <div class="user-avatar" style="background-color: {{avatarColor adminName}}">{{initial adminName}}</div>
-            <div class="user-meta">
-                <div class="user-name">{{adminName}}</div>
-                <div class="user-role">{{adminRole}}</div>
+            <div class="user-avatar" style="background-color: {{avatarColor user.email}}">
+                {{#if user.image}}
+                <img src="{{user.image}}" alt="{{user.name}}" class="w-full h-full object-cover rounded-full">
+                {{else if user.name}}
+                {{initial user.name}}
+                {{else}}
+                {{initial user.email}}
+                {{/if}}
             </div>
-            <i class="fas fa-ellipsis" style="color: rgba(255,255,255,0.3); font-size: 12px;"></i>
+            <div class="user-meta">
+                <div class="user-name">{{#if user.name}}{{user.name}}{{else}}{{user.email}}{{/if}}</div>
+                <div class="user-role">{{user.role}}</div>
+            </div>
+            <i class="fas fa-ellipsis sidebar-user-trailing" style="color: rgba(255,255,255,0.3); font-size: 12px;"></i>
         </div>
     </div>
 </aside>

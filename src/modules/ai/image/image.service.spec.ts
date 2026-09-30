@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImageService } from './image.service';
 import { ProviderRouterService } from '../providers/provider-router.service';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 
 describe('ImageService', () => {
   let service: ImageService;

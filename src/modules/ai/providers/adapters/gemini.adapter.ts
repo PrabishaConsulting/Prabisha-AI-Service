@@ -16,8 +16,8 @@ import {
   DocumentChunk,
 } from '../provider.interface';
 import { ProviderName, Modality } from 'src/generated/prisma/enums';
-import { PrismaService } from '../../prisma/prisma.service';
-import { AdminService } from '../../admin/admin.service'; // 1. Import AdminService
+import { PrismaService } from '../../../prisma/prisma.service';
+import { AdminService } from '../../../admin/admin.service'; // 1. Import AdminService
 
 dns.setDefaultResultOrder('ipv4first');
 

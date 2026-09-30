@@ -51,8 +51,8 @@
                         data-api-key-id="{{id}}"
                         data-api-key-name="{{name}}"
                         data-api-key-scopes="{{#each scopes}}{{this}}{{#unless @last}},{{/unless}}{{/each}}"
-                        data-api-key-rpm-limit="{{#if rpmLimit}}{{rpmLimit}}{{else}}60{{/if}}"
-                        data-api-key-rpd-limit="{{#if rpdLimit}}{{rpdLimit}}{{else}}1000{{/if}}"
+                        data-api-key-rpm-limit="{{rpmLimit}}"
+                        data-api-key-rpd-limit="{{rpdLimit}}"
                         data-api-key-monthly-token-limit="{{#if monthlyTokenLimit}}{{monthlyTokenLimit}}{{/if}}"
                         data-api-key-expires-at="{{expiresAt}}">
                         <td class="px-6 py-4 font-bold text-slate-900">{{name}}</td>
@@ -69,8 +69,9 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 font-medium text-slate-500">
-                            <div class="flex items-center gap-1"><i class="fas fa-bolt text-[10px] w-3"></i> {{#if rpmLimit}}{{rpmLimit}}{{else}}60{{/if}} RPM</div>
-                            <div class="flex items-center gap-1 mt-1"><i class="fas fa-calendar text-[10px] w-3"></i> {{#if rpdLimit}}{{rpdLimit}}{{else}}1000{{/if}} RPD</div>
+                            <div class="flex items-center gap-1"><i class="fas fa-bolt text-[10px] w-3"></i> {{#if rpmLimit}}{{rpmLimit}} RPM{{else}}No RPM cap{{/if}}</div>
+                            <div class="flex items-center gap-1 mt-1"><i class="fas fa-calendar text-[10px] w-3"></i> {{#if rpdLimit}}{{rpdLimit}} RPD{{else}}No daily cap{{/if}}</div>
+                            <div class="flex items-center gap-1 mt-1"><i class="fas fa-coins text-[10px] w-3"></i> {{#if monthlyTokenLimit}}{{monthlyTokenLimit}}{{else}}No cap{{/if}} monthly tokens</div>
                         </td>
                         <td class="px-6 py-4">
                             <span class="font-bold text-slate-900">{{usageCount}}</span> calls
@@ -94,8 +95,9 @@
                             {{/if}}
                         </td>
                         <td class="px-6 py-4 text-right space-x-1.5 font-bold text-sm">
-                            <button onclick="editKey(this)" class="text-slate-400 hover:text-slate-950 transition-colors"><i class="fas fa-edit"></i></button>
-                            <button onclick="revokeKey(this)" class="text-slate-400 hover:text-rose-600 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                            <button type="button" title="Edit API key and rate limits" onclick="editKey(this)" class="text-slate-400 hover:text-slate-950 transition-colors"><i class="fas fa-edit"></i></button>
+                            <button type="button" title="Revoke API key" onclick="revokeKey(this)" class="text-slate-400 hover:text-amber-600 transition-colors"><i class="fas fa-ban"></i></button>
+                            <button type="button" title="Permanently delete API key and usage history" onclick="permanentlyDeleteKey(this)" class="text-slate-400 hover:text-rose-600 transition-colors"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     {{else}}
@@ -113,9 +115,11 @@
     </div>
 </div>
 
-<div id="createKeyModal" class="fixed inset-0 bg-slate-950/40 hidden z-50 overflow-y-auto backdrop-blur-sm">
+<!-- Background overlay (handles click to close with backdrop blur) -->
+<div id="createKeyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-y-auto backdrop-filter backdrop-blur-sm" onclick="closeModal()">
     <div class="flex items-start justify-center min-h-screen p-4">
-        <div class="bg-white border border-slate-200 rounded-xl max-w-xl w-full shadow-2xl my-12 overflow-hidden">
+        <!-- Modal Content (stops click from bubbling to background) -->
+        <div class="bg-white border border-slate-200 rounded-xl max-w-xl w-full shadow-2xl my-12 overflow-hidden" onclick="event.stopPropagation()">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50">
                 <h3 class="text-sm font-bold text-slate-900 tracking-tight" id="modalTitle">Instantiate New API Target Key</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
@@ -156,11 +160,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Requests / Minute (RPM)</label>
-                            <input type="number" id="rpmLimit" value="60" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
+                            <input type="number" id="rpmLimit" min="1" value="60" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Requests / Day (RPD)</label>
-                            <input type="number" id="rpdLimit" value="1000" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
+                            <input type="number" id="rpdLimit" min="1" value="1000" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
                         </div>
                     </div>
                 </div>
@@ -168,7 +172,7 @@
                 <div class="border-t border-slate-100 pt-4">
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Ceiling Threshold</h4>
                     <label class="block text-[11px] font-semibold text-slate-500 mb-1">Monthly Max Volumetric Tokens</label>
-                    <input type="number" id="monthlyTokenLimit" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium" placeholder="Unlimited base tracking execution maps">
+                    <input type="number" id="monthlyTokenLimit" min="1" step="1" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium" placeholder="No monthly token cap">
                 </div>
                 
                 <div class="border-t border-slate-100 pt-4">
@@ -194,8 +198,8 @@
     </div>
 </div>
 
-<div id="keyDisplayModal" class="fixed inset-0 bg-slate-950/40 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-    <div class="bg-white border border-slate-200 rounded-xl max-w-md w-full shadow-2xl p-6 text-center text-sm">
+<div id="keyDisplayModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closeKeyDisplayModal()">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-md w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
         <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-100">
             <i class="fas fa-check text-lg"></i>
         </div>
@@ -213,9 +217,44 @@
     </div>
 </div>
 
+<!-- Custom Revoke Key Modal -->
+<div id="revokeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closeRevokeModal()">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-sm w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
+        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
+            <i class="fas fa-exclamation-triangle text-base"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900 mb-1">Revoke API Key?</h3>
+        <p class="text-xs text-slate-500 mb-4">Are you sure you want to revoke <strong id="revokeKeyNameDisplay" class="text-slate-900"></strong>? This cannot be undone.</p>
+        
+        <div class="flex gap-3 w-full mt-2">
+            <button type="button" onclick="closeRevokeModal()" class="flex-1 font-bold text-xs border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition">Cancel</button>
+            
+            <!-- Fixed button with inline style to prevent Tailwind JIT compilation misses -->
+            <button type="button" onclick="confirmRevokeKey()" class="flex-1 font-bold text-xs text-white py-2.5 rounded-lg transition hover:opacity-90 shadow-sm" style="background-color: #e11d48;">Revoke Key</button>
+        </div>
+    </div>
+</div>
+
+<div id="permanentDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closePermanentDeleteModal()">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-sm w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
+        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
+            <i class="fas fa-trash-alt text-base"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900 mb-1">Permanently Delete API Key?</h3>
+        <p class="text-xs text-slate-500 mb-4">Delete <strong id="permanentDeleteKeyName" class="text-slate-900"></strong> and its associated usage history. This cannot be undone.</p>
+        <div class="flex gap-3 w-full mt-2">
+            <button type="button" onclick="closePermanentDeleteModal()" class="flex-1 font-bold text-xs border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition">Cancel</button>
+            <button type="button" onclick="confirmPermanentDeleteKey()" class="flex-1 font-bold text-xs text-white py-2.5 rounded-lg transition hover:opacity-90 shadow-sm" style="background-color: #e11d48;">Delete Permanently</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // System operational script arrays are sustained safely from native view logic contexts natively.
     let generatedRawKey = '';
+    let currentRevokeKeyId = null;
+    let currentPermanentDeleteKeyId = null;
+
     function showCreateKeyModal() {
         document.getElementById('modalTitle').innerHTML = 'Instantiate New API Target Key';
         document.getElementById('createKeyForm').reset();
@@ -224,15 +263,27 @@
         document.getElementById('rpdLimit').value = '1000';
         document.getElementById('createKeyModal').classList.remove('hidden');
     }
+
     function closeModal() { document.getElementById('createKeyModal').classList.add('hidden'); }
-    function copyToClipboard() {
-        navigator.clipboard.writeText(generatedRawKey);
-        alert('API hash string piped safely to system clipboard framework structures.');
-    }
+    
     function closeKeyDisplayModal() {
         document.getElementById('keyDisplayModal').classList.add('hidden');
         document.getElementById('generatedKey').textContent = '';
         location.reload();
+    }
+
+    function copyToClipboard() {
+        if (!generatedRawKey) {
+            return typeof showToast === 'function' ? showToast('No API key available to copy', 'error') : alert('No API key available to copy');
+        }
+
+        navigator.clipboard.writeText(generatedRawKey);
+        
+        if(typeof showToast === 'function') {
+            showToast('API key copied to clipboard', 'success');
+        } else {
+            alert('API hash string piped safely to system clipboard framework structures.');
+        }
     }
 
     function setScopeCheckboxes(scopes) {
@@ -257,10 +308,12 @@
         const editKeyId = document.getElementById('editKeyId').value;
         const name = document.getElementById('keyName').value.trim();
         const scopes = getSelectedScopes();
-        const rpmLimit = parseInt(document.getElementById('rpmLimit').value, 10) || 60;
-        const rpdLimit = parseInt(document.getElementById('rpdLimit').value, 10) || 1000;
-        const monthlyTokenLimitValue = document.getElementById('monthlyTokenLimit').value;
-        const monthlyTokenLimit = monthlyTokenLimitValue ? parseInt(monthlyTokenLimitValue, 10) : undefined;
+        const rpmLimitValue = document.getElementById('rpmLimit').value.trim();
+        const rpdLimitValue = document.getElementById('rpdLimit').value.trim();
+        const monthlyTokenLimitValue = document.getElementById('monthlyTokenLimit').value.trim();
+        const rpmLimit = rpmLimitValue ? Number(rpmLimitValue) : null;
+        const rpdLimit = rpdLimitValue ? Number(rpdLimitValue) : null;
+        const monthlyTokenLimit = monthlyTokenLimitValue || null;
         const expiresAtValue = document.getElementById('expiresAt').value;
         const expiresInValue = document.getElementById('expiresIn').value;
         let expiresAt;
@@ -276,9 +329,7 @@
             }
         }
 
-        const payload = { name, scopes, rpmLimit, rpdLimit };
-        if (monthlyTokenLimit !== undefined) payload.monthlyTokenLimit = monthlyTokenLimit;
-        if (expiresAt) payload.expiresAt = expiresAt;
+        const payload = { name, scopes, rpmLimit, rpdLimit, monthlyTokenLimit, expiresAt: expiresAt || null };
 
         const url = editKeyId ? `/admin/api/keys/${editKeyId}` : '/admin/api/keys';
         const method = editKeyId ? 'PUT' : 'POST';
@@ -296,7 +347,7 @@
             }
 
             if (editKeyId) {
-                showToast('API key updated successfully');
+                if(typeof showToast === 'function') showToast('API key updated successfully');
                 closeModal();
                 return location.reload();
             }
@@ -307,65 +358,105 @@
             closeModal();
         } catch (error) {
             console.error(error);
-            showToast(error.message || 'Error saving API key', 'error');
+            if(typeof showToast === 'function') showToast(error.message || 'Error saving API key', 'error');
         }
     }
 
-    function editKey(id) {
-        const row = document.querySelector(`tr[data-api-key-id="${id}"]`);
+    function editKey(button) {
+        const row = button.closest('tr[data-api-key-id]');
+        const id = row?.dataset.apiKeyId;
         if (!row) {
-            return showToast('API key not found', 'error');
+            return typeof showToast === 'function' ? showToast('API key not found', 'error') : alert('API key not found');
         }
 
         document.getElementById('modalTitle').innerHTML = 'Edit API Key';
         document.getElementById('editKeyId').value = id;
         document.getElementById('keyName').value = row.dataset.apiKeyName || '';
-        document.getElementById('rpmLimit').value = row.dataset.apiKeyRpmLimit || '60';
-        document.getElementById('rpdLimit').value = row.dataset.apiKeyRpdLimit || '1000';
+        document.getElementById('rpmLimit').value = row.dataset.apiKeyRpmLimit || '';
+        document.getElementById('rpdLimit').value = row.dataset.apiKeyRpdLimit || '';
         document.getElementById('monthlyTokenLimit').value = row.dataset.apiKeyMonthlyTokenLimit || '';
-        document.getElementById('expiresAt').value = row.dataset.apiKeyExpiresAt || '';
+        document.getElementById('expiresAt').value = row.dataset.apiKeyExpiresAt?.slice(0, 10) || '';
         document.getElementById('expiresIn').value = '';
         setScopeCheckboxes(parseApiKeyScopes(row.dataset.apiKeyScopes || ''));
         document.getElementById('createKeyModal').classList.remove('hidden');
     }
 
-    async function revokeKey(button) {
+    // Modern Revoke Logic using Modal
+    function revokeKey(button) {
         const row = button.closest('tr');
-        const id = row?.dataset.apiKeyId;
+        currentRevokeKeyId = row?.dataset.apiKeyId;
         const name = row?.dataset.apiKeyName;
-        if (!id) {
-            return showToast('Unable to identify API key for revocation', 'error');
+        
+        if (!currentRevokeKeyId) {
+            return typeof showToast === 'function' ? showToast('Unable to identify API key for revocation', 'error') : alert('Unable to identify API key');
         }
 
-        if (!confirm(`Revoke API key "${name}"? This cannot be undone.`)) {
-            return;
-        }
+        document.getElementById('revokeKeyNameDisplay').textContent = name;
+        document.getElementById('revokeModal').classList.remove('hidden');
+    }
+
+    function closeRevokeModal() {
+        document.getElementById('revokeModal').classList.add('hidden');
+        currentRevokeKeyId = null;
+    }
+
+    async function confirmRevokeKey() {
+        if (!currentRevokeKeyId) return;
 
         try {
-            const response = await fetch(`/admin/api/keys/${id}`, { method: 'DELETE' });
+            const response = await fetch(`/admin/api/keys/${currentRevokeKeyId}`, { method: 'DELETE' });
             const result = await response.json();
 
             if (!response.ok) {
                 throw new Error(result.message || 'Unable to revoke API key');
             }
 
-            showToast('API key revoked successfully');
+            if(typeof showToast === 'function') showToast('API key revoked successfully');
+            closeRevokeModal();
             location.reload();
         } catch (error) {
             console.error(error);
-            showToast(error.message || 'Error revoking API key', 'error');
+            if(typeof showToast === 'function') showToast(error.message || 'Error revoking API key', 'error');
+            closeRevokeModal();
         }
     }
 
-    function copyToClipboard() {
-        if (!generatedRawKey) {
-            return showToast('No API key available to copy', 'error');
+    function permanentlyDeleteKey(button) {
+        const row = button.closest('tr[data-api-key-id]');
+        currentPermanentDeleteKeyId = row?.dataset.apiKeyId;
+        if (!currentPermanentDeleteKeyId) {
+            return typeof showToast === 'function' ? showToast('Unable to identify API key for deletion', 'error') : alert('Unable to identify API key');
         }
 
-        navigator.clipboard.writeText(generatedRawKey);
-        showToast('API key copied to clipboard', 'success');
+        document.getElementById('permanentDeleteKeyName').textContent = row.dataset.apiKeyName || 'this key';
+        document.getElementById('permanentDeleteModal').classList.remove('hidden');
+    }
+
+    function closePermanentDeleteModal() {
+        document.getElementById('permanentDeleteModal').classList.add('hidden');
+        currentPermanentDeleteKeyId = null;
+    }
+
+    async function confirmPermanentDeleteKey() {
+        if (!currentPermanentDeleteKeyId) return;
+
+        const id = currentPermanentDeleteKeyId;
+        try {
+            const response = await fetch(`/admin/api/keys/${id}/permanent`, { method: 'DELETE' });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || 'Unable to permanently delete API key');
+            }
+
+            closePermanentDeleteModal();
+            if (typeof showToast === 'function') showToast('API key and associated usage history deleted permanently');
+            location.reload();
+        } catch (error) {
+            console.error(error);
+            if (typeof showToast === 'function') showToast(error.message || 'Error deleting API key', 'error');
+            closePermanentDeleteModal();
+        }
     }
 
     document.getElementById('createKeyForm').addEventListener('submit', handleCreateUpdateForm);
-    // Form handles connect cleanly upstream mapping payload JSON parameters directly.
 </script>

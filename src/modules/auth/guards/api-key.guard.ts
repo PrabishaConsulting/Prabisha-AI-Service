@@ -1,5 +1,12 @@
 // src/modules/auth/guards/api-key.guard.ts
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { 
+  Injectable, 
+  CanActivate, 
+  ExecutionContext, 
+  UnauthorizedException, 
+  HttpException, 
+  HttpStatus 
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
@@ -48,6 +55,8 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException('Invalid or expired API key');
     }
 
+    await this.enforceRateLimits(apiKeyRecord);
+
     // 5. Update last used timestamp and usage count
     await this.prisma.apiKey.update({
       where: { id: apiKeyRecord.id },
@@ -66,5 +75,66 @@ export class ApiKeyGuard implements CanActivate {
     };
     
     return true;
+  }
+
+  private async enforceRateLimits(apiKey: {
+    id: string;
+    rpmLimit: number | null;
+    rpdLimit: number | null;
+  }) {
+    if (apiKey.rpmLimit == null && apiKey.rpdLimit == null) return;
+
+    const now = new Date();
+    const minuteReset = new Date(now.getTime() + 60_000);
+    const dayReset = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    await this.prisma.$transaction(async (transaction) => {
+      await transaction.rateLimitBucket.upsert({
+        where: { apiKeyId: apiKey.id },
+        create: {
+          apiKeyId: apiKey.id,
+          minuteCount: 0,
+          dayCount: 0,
+          minuteResetsAt: minuteReset,
+          dayResetsAt: dayReset,
+        },
+        update: {},
+      });
+
+      await transaction.rateLimitBucket.updateMany({
+        where: { apiKeyId: apiKey.id, minuteResetsAt: { lte: now } },
+        data: { minuteCount: 0, minuteResetsAt: minuteReset },
+      });
+      await transaction.rateLimitBucket.updateMany({
+        where: { apiKeyId: apiKey.id, dayResetsAt: { lte: now } },
+        data: { dayCount: 0, dayResetsAt: dayReset },
+      });
+
+      if (apiKey.rpmLimit != null) {
+        const updated = await transaction.rateLimitBucket.updateMany({
+          where: { apiKeyId: apiKey.id, minuteCount: { lt: apiKey.rpmLimit } },
+          data: { minuteCount: { increment: 1 } },
+        });
+        if (updated.count === 0) {
+          throw new HttpException(
+            'API key requests-per-minute limit exceeded', 
+            HttpStatus.TOO_MANY_REQUESTS
+          );
+        }
+      }
+
+      if (apiKey.rpdLimit != null) {
+        const updated = await transaction.rateLimitBucket.updateMany({
+          where: { apiKeyId: apiKey.id, dayCount: { lt: apiKey.rpdLimit } },
+          data: { dayCount: { increment: 1 } },
+        });
+        if (updated.count === 0) {
+          throw new HttpException(
+            'API key requests-per-day limit exceeded', 
+            HttpStatus.TOO_MANY_REQUESTS
+          );
+        }
+      }
+    });
   }
 }

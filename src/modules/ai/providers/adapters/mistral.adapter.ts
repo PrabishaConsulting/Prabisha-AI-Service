@@ -1,7 +1,7 @@
 // src/modules/providers/adapters/mistral.adapter.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { Modality } from 'src/generated/prisma/enums';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()
 export class MistralProvider {

@@ -1,5 +1,5 @@
 // src/modules/admin/admin.service.ts
-import { Injectable, ForbiddenException, Logger } from '@nestjs/common';
+import { Injectable, ForbiddenException, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProviderName, ProviderStatus, ApiKeyStatus, ApiKeyScope, Modality } from 'src/generated/prisma/enums';
 import * as crypto from 'crypto';
@@ -449,7 +449,7 @@ export class AdminService {
       usageCount: key.usageCount,
       rpmLimit: key.rpmLimit,
       rpdLimit: key.rpdLimit,
-      monthlyTokenLimit: key.monthlyTokenLimit ? Number(key.monthlyTokenLimit) : null,
+      monthlyTokenLimit: key.monthlyTokenLimit?.toString() ?? null,
       createdAt: key.createdAt,
       user: {
         email: key.user.email,
@@ -517,7 +517,13 @@ export class AdminService {
       },
     });
 
-    return { apiKey, rawKey };
+    return {
+      apiKey: {
+        ...apiKey,
+        monthlyTokenLimit: apiKey.monthlyTokenLimit?.toString() ?? null,
+      },
+      rawKey,
+    };
   }
 
   // Add method to get API key stats
@@ -551,32 +557,65 @@ export class AdminService {
   async updateApiKey(id: string, data: {
     name?: string;
     scopes?: ApiKeyScope[];
-    rpmLimit?: number;
-    rpdLimit?: number;
-    monthlyTokenLimit?: number;
-    expiresAt?: Date;
+    rpmLimit?: number | null;
+    rpdLimit?: number | null;
+    monthlyTokenLimit?: number | string | null;
+    expiresAt?: Date | null;
   }) {
-    return this.prisma.apiKey.update({
+    const apiKey = await this.prisma.apiKey.update({
       where: { id },
       data: {
         name: data.name,
         scopes: data.scopes,
         rpmLimit: data.rpmLimit,
         rpdLimit: data.rpdLimit,
-        monthlyTokenLimit: data.monthlyTokenLimit ? BigInt(data.monthlyTokenLimit) : null,
+        monthlyTokenLimit: data.monthlyTokenLimit == null || data.monthlyTokenLimit === ''
+          ? null
+          : BigInt(data.monthlyTokenLimit),
         expiresAt: data.expiresAt,
         updatedAt: new Date(),
       },
     });
+
+    return {
+      ...apiKey,
+      monthlyTokenLimit: apiKey.monthlyTokenLimit?.toString() ?? null,
+    };
   }
 
   async revokeApiKey(apiKeyId: string) {
-    return this.prisma.apiKey.update({
+    const apiKey = await this.prisma.apiKey.update({
       where: { id: apiKeyId },
       data: {
         status: ApiKeyStatus.REVOKED,
         revokedAt: new Date(),
       },
+    });
+
+    return { id: apiKey.id, status: apiKey.status, revokedAt: apiKey.revokedAt };
+  }
+
+  async permanentlyDeleteApiKey(apiKeyId: string) {
+    return this.prisma.$transaction(async (transaction) => {
+      const apiKey = await transaction.apiKey.findUnique({
+        where: { id: apiKeyId },
+        select: { id: true },
+      });
+      if (!apiKey) {
+        throw new NotFoundException('API key not found');
+      }
+
+      const usageLogs = await transaction.usageLog.deleteMany({
+        where: { apiKeyId },
+      });
+      await transaction.rateLimitBucket.deleteMany({
+        where: { apiKeyId },
+      });
+      await transaction.apiKey.delete({
+        where: { id: apiKeyId },
+      });
+
+      return { id: apiKeyId, deleted: true, deletedUsageLogs: usageLogs.count };
     });
   }
 

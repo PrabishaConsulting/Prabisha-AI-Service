@@ -1,15 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmbeddingsController } from './embeddings.controller';
 import { EmbeddingsService } from './embeddings.service';
 import { ProviderRouterService } from '../providers/provider-router.service';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 
-describe('EmbeddingsController', () => {
-  let controller: EmbeddingsController;
+describe('EmbeddingsService', () => {
+  let service: EmbeddingsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [EmbeddingsController],
       providers: [
         EmbeddingsService,
         { provide: ProviderRouterService, useValue: {} },
@@ -17,10 +15,10 @@ describe('EmbeddingsController', () => {
       ],
     }).compile();
 
-    controller = module.get<EmbeddingsController>(EmbeddingsController);
+    service = module.get<EmbeddingsService>(EmbeddingsService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(service).toBeDefined();
   });
 });
