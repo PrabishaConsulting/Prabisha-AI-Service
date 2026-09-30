@@ -3,7 +3,7 @@ import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 import { ProviderRouterService } from '../providers/provider-router.service';
 import { ImageGenerationRequest, ImageGenerationResponse } from '../providers/provider.interface';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 import { Modality } from 'src/generated/prisma/enums';
 
 @Injectable()
@@ -18,6 +18,7 @@ export class ImageService {
     userId: string,
     apiKeyId: string,
     requestOriginUrl?: string,
+    ipAddress?: string,
   ): Promise<ImageGenerationResponse> {
     const { prompt, model, preferredProvider, size, quality, n } = createImageDto;
     const request: ImageGenerationRequest = { prompt, model, size, quality, n };
@@ -28,6 +29,7 @@ export class ImageService {
       apiKeyId,
       endpoint: '/image',
       requestOriginUrl,
+      ipAddress,
       modality: Modality.IMAGE,
       providerId: response.providerId,
       providerModelId: response.providerModelId,

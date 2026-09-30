@@ -1,6 +1,6 @@
 // src/modules/providers/provider-router.service.ts
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { Modality, ProviderName } from 'src/generated/prisma/enums';
 import { OpenAIProvider } from './adapters/openai.adapter';
 import { AnthropicProvider } from './adapters/anthropic.adapter';

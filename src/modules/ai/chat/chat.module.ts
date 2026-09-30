@@ -5,8 +5,8 @@ import { BullModule } from '@nestjs/bull';
 import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { ProvidersModule } from '../providers/providers.module';
-import { AuthModule } from '../auth/auth.module';
-import { UsageModule } from '../usage/usage.module';
+import { AuthModule } from '../../auth/auth.module';
+import { UsageModule } from '../../usage/usage.module';
 
 @Module({
   imports: [

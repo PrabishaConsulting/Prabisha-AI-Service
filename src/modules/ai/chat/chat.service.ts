@@ -3,7 +3,7 @@ import { Injectable, Logger, Inject } from '@nestjs/common';
 import * as CacheManager from 'cache-manager';
 import { ProviderRouterService } from '../providers/provider-router.service';
 import { ChatRequestDto } from './dto/chat-request';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 
 @Injectable()
 export class ChatService {
@@ -20,6 +20,7 @@ export class ChatService {
     userId: string,
     apiKeyId: string,
     requestOriginUrl?: string,
+    ipAddress?: string,
   ) {
     // Check cache
     const cacheKey = this.generateCacheKey(request);
@@ -32,6 +33,7 @@ export class ChatService {
         apiKeyId,
         endpoint: '/chat',
         requestOriginUrl,
+        ipAddress,
         modality: 'TEXT',
         providerId: cachedResponse.providerId,
         providerModelId: cachedResponse.providerModelId,
@@ -69,6 +71,7 @@ export class ChatService {
       apiKeyId,
       endpoint: '/chat',
       requestOriginUrl,
+      ipAddress,
       promptTokens: response.usage.promptTokens,
       completionTokens: response.usage.completionTokens,
       totalTokens: response.usage.totalTokens,

@@ -16,6 +16,7 @@ export class UsageService {
     apiKeyId: string;
     endpoint: string;
     requestOriginUrl?: string;
+    ipAddress?: string;
     modality: Modality;
     providerId?: string;
     providerModelId?: string;
@@ -61,6 +62,7 @@ export class UsageService {
           status: event.status ?? RequestStatus.SUCCESS,
           endpointPath: event.endpoint,
           requestOriginUrl: event.requestOriginUrl ?? null,
+          ipAddress: event.ipAddress ?? null,
           promptTokens: event.promptTokens ?? null,
           completionTokens: event.completionTokens ?? null,
           totalTokens,

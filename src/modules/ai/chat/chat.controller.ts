@@ -2,7 +2,7 @@
 import { Controller, Post, Body, UseGuards, Req, Headers } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ChatService } from './chat.service';
-import { ApiKeyGuard } from '../auth/guards/api-key.guard';
+import { ApiKeyGuard } from '../../auth/guards/api-key.guard';
 import { ChatRequestDto } from './dto/chat-request';
 
 @Controller('chat')
@@ -17,12 +17,13 @@ export class ChatController {
     @Req() req: any,
     @Headers('x-api-key') apiKey: string,
   ) {
-    const requestOriginUrl = req.headers.origin || req.headers.referer;
+    const requestOriginUrl = req.headers.origin || req.headers.referer || req.headers['x-client-origin'];
     const result = await this.chatService.processChat(
       request,
       req.user.id,
       req.user.apiKeyId,
       requestOriginUrl,
+      req.ip || req.socket.remoteAddress,
     );
     
     return {

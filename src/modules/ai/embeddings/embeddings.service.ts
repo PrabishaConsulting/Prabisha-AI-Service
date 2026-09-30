@@ -3,7 +3,7 @@ import { CreateEmbeddingDto } from './dto/create-embedding.dto';
 import { UpdateEmbeddingDto } from './dto/update-embedding.dto';
 import { ProviderRouterService } from '../providers/provider-router.service';
 import { EmbeddingRequest, EmbeddingResponse } from '../providers/provider.interface';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 import { Modality } from 'src/generated/prisma/enums';
 
 @Injectable()
@@ -18,6 +18,7 @@ export class EmbeddingsService {
     userId: string,
     apiKeyId: string,
     requestOriginUrl?: string,
+    ipAddress?: string,
   ): Promise<EmbeddingResponse> {
     const { input, model, preferredProvider } = createEmbeddingDto;
     const request: EmbeddingRequest = { input, model };
@@ -28,6 +29,7 @@ export class EmbeddingsService {
       apiKeyId,
       endpoint: '/embeddings',
       requestOriginUrl,
+      ipAddress,
       modality: Modality.EMBEDDING,
       providerId: response.providerId,
       providerModelId: response.providerModelId,

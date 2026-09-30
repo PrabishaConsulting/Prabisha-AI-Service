@@ -28,6 +28,7 @@ export class UsageProcessor {
       imageCount,
       isCached,
       requestOriginUrl,
+      ipAddress,
     } = job.data;
 
     try {
@@ -65,6 +66,7 @@ export class UsageProcessor {
           status: job.data.status || 'SUCCESS',
           endpointPath: endpoint || '/chat',
           requestOriginUrl: requestOriginUrl ?? null,
+          ipAddress: ipAddress ?? null,
           promptTokens: promptTokens ?? null,
           completionTokens: completionTokens ?? null,
           totalTokens: tokens ?? 0,

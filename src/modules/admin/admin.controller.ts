@@ -260,6 +260,11 @@ export class AdminController {
     return this.adminService.revokeApiKey(id);
   }
 
+  @Delete('api/keys/:id/permanent')
+  async permanentlyDeleteApiKey(@Param('id') id: string) {
+    return this.adminService.permanentlyDeleteApiKey(id);
+  }
+
   @Get('api/analytics/stats')
   async getAnalyticsStats() {
     const dailyUsage = await this.adminService.getDailyUsage(30);

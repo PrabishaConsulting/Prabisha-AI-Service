@@ -1,26 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ChatService } from './chat.service';
+import { ImageController } from './image.controller';
+import { ImageService } from './image.service';
 import { ProviderRouterService } from '../providers/provider-router.service';
-import { UsageService } from '../usage/usage.service';
+import { UsageService } from '../../usage/usage.service';
 
-describe('ChatService', () => {
-  let service: ChatService;
+describe('ImageController', () => {
+  let controller: ImageController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [ImageController],
       providers: [
-        ChatService,
+        ImageService,
         { provide: ProviderRouterService, useValue: {} },
         { provide: UsageService, useValue: {} },
-        { provide: 'CACHE_MANAGER', useValue: {} },
-        { provide: 'BullQueue_usage-tracking', useValue: {} },
       ],
     }).compile();
 
-    service = module.get<ChatService>(ChatService);
+    controller = module.get<ImageController>(ImageController);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });

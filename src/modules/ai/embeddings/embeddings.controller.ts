@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } fro
 import { EmbeddingsService } from './embeddings.service';
 import { CreateEmbeddingDto } from './dto/create-embedding.dto';
 import { UpdateEmbeddingDto } from './dto/update-embedding.dto';
-import { ApiKeyGuard } from '../auth/guards/api-key.guard';
+import { ApiKeyGuard } from '../../auth/guards/api-key.guard';
 
 @Controller('embeddings')
 @UseGuards(ApiKeyGuard)
@@ -11,12 +11,13 @@ export class EmbeddingsController {
 
   @Post()
   create(@Body() createEmbeddingDto: CreateEmbeddingDto, @Req() req: any) {
-    const requestOriginUrl = req.headers.origin || req.headers.referer;
+    const requestOriginUrl = req.headers.origin || req.headers.referer || req.headers['x-client-origin'];
     return this.embeddingsService.create(
       createEmbeddingDto,
       req.user.id,
       req.user.apiKeyId,
       requestOriginUrl,
+      req.ip || req.socket.remoteAddress,
     );
   }
 

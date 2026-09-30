@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import Anthropic from '@anthropic-ai/sdk';
 import { AIProvider, ChatRequest, ChatResponse } from '../provider.interface';
 import { ProviderName, Modality } from 'src/generated/prisma/enums';
-import { PrismaService } from '../../prisma/prisma.service';
-import { AdminService } from '../../admin/admin.service';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { AdminService } from '../../../admin/admin.service';
 
 @Injectable()
 export class AnthropicProvider implements AIProvider {

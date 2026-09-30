@@ -14,6 +14,8 @@ export class DocumentsService {
     data: { file: Buffer; mimeType: string; prompt?: string; model?: string },
     userId: string,
     apiKeyId: string,
+    requestOriginUrl?: string,
+    ipAddress?: string,
   ) {
     if (!data.file?.length || !data.mimeType) {
       throw new BadRequestException('Missing required fields for document parsing');
@@ -28,6 +30,8 @@ export class DocumentsService {
         userId,
         apiKeyId,
         endpoint: '/documents/parse',
+        requestOriginUrl,
+        ipAddress,
         promptTokens: response.usage.promptTokens,
         completionTokens: response.usage.completionTokens,
         tokens: response.usage.totalTokens,
