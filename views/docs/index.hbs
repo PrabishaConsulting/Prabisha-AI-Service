@@ -1,7 +1,7 @@
 <div>
-    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3" id="introduction">Welcome to AI Gateway API</h1>
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3" id="introduction">AI Gateway API</h1>
     <p class="text-slate-600 mb-8 leading-relaxed">
-        A production-grade, unified API framework constructed to orchestrate workloads across diverse LLM providers like OpenAI, Anthropic, Gemini, and Mistral through a single resilient endpoint core.
+        One authenticated API for chat completions, image generation, text embeddings, and Gemini PDF parsing. Requests are routed to enabled provider models configured in the gateway.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
@@ -33,8 +33,8 @@
         <div class="p-2 rounded-lg bg-white shadow-sm text-indigo-700">
             <i class="fas fa-rocket"></i>
         </div>
-        <p class="text-slate-600 text-sm leading-relaxed">
-            <strong>Provisioning instances:</strong> Ensure your profile holds verified keys generated within the centralized auth database. Grab yours inside the <a href="/auth/central" class="font-semibold underline" style="color: #111CA8;">developer gateway portal</a>.
+            <p class="text-slate-600 text-sm leading-relaxed">
+            <strong>Get started:</strong> Sign in to the <a href="/auth/central" class="font-semibold underline" style="color: #111CA8;">developer portal</a> and create an API key. Keep the secret on your server and send it in the <code>X-API-Key</code> header.
         </p>
     </div>
 
@@ -42,7 +42,7 @@
         <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Target Gateway Base URL</label>
             <div class="bg-slate-900 rounded-lg p-3 text-sm font-mono text-emerald-400 border border-slate-800">
-                https://api.yourdomain.com
+                https://aiservice.prabisha.com
             </div>
         </div>
 
@@ -55,25 +55,40 @@
 
         <div>
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Initialize Script Pipeline</label>
-            <pre><code class="language-javascript">const axios = require('axios');
-
-const response = await axios.post('https://api.yourdomain.com/api/chat', {
-  messages: [{ role: 'user', content: 'Hello, AI Gateway!' }]
-}, {
-  headers: {
-    'X-API-Key': 'your-api-key-here',
-    'Content-Type': 'application/json'
-  }
+                        <pre><code class="language-javascript">const response = await fetch('https://aiservice.prabisha.com/chat', {
+    method: 'POST',
+    headers: {
+        'X-API-Key': process.env.AI_SERVICE_API_KEY,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        messages: [{ role: 'user', content: 'Hello, AI Gateway!' }],
+        preferredProvider: 'GEMINI'
+    })
 });
 
-console.log(response.data);</code></pre>
+const result = await response.json();
+console.log(result.data.content);</code></pre>
         </div>
     </div>
+
+        <h2 class="text-xl font-bold text-slate-900 mt-10 mb-4">Available Endpoints</h2>
+        <div class="overflow-hidden border border-slate-200 rounded-xl">
+                <table class="min-w-full divide-y divide-slate-200 text-sm">
+                        <thead class="bg-slate-50"><tr><th class="px-4 py-3 text-left">Method</th><th class="px-4 py-3 text-left">Path</th><th class="px-4 py-3 text-left">Guide</th></tr></thead>
+                        <tbody class="divide-y divide-slate-200 bg-white text-slate-600">
+                                <tr><td class="px-4 py-3 font-mono">POST</td><td class="px-4 py-3 font-mono">/chat</td><td class="px-4 py-3"><a class="underline" href="/docs/chat">Chat completions</a></td></tr>
+                                <tr><td class="px-4 py-3 font-mono">POST</td><td class="px-4 py-3 font-mono">/image</td><td class="px-4 py-3"><a class="underline" href="/docs/image">Image generation</a></td></tr>
+                                <tr><td class="px-4 py-3 font-mono">POST</td><td class="px-4 py-3 font-mono">/embeddings</td><td class="px-4 py-3"><a class="underline" href="/docs/embeddings">Text embeddings</a></td></tr>
+                                <tr><td class="px-4 py-3 font-mono">POST</td><td class="px-4 py-3 font-mono">/documents/parse</td><td class="px-4 py-3"><a class="underline" href="/docs/documents">PDF document parsing</a></td></tr>
+                        </tbody>
+                </table>
+        </div>
 
     <div class="border border-emerald-200 bg-emerald-50/50 rounded-xl p-4 mt-8 flex items-center gap-3">
         <i class="fas fa-check-circle text-emerald-600"></i>
         <p class="text-emerald-800 text-sm font-medium">
-            Core environment setups complete. Select endpoint categories in the navigation structural grid matrix to route requests.
+            All listed AI endpoints require an active key in the <code>X-API-Key</code> header. See the endpoint guides for request fields and response shapes.
         </p>
     </div>
 </div>

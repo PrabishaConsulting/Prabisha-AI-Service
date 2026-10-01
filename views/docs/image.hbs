@@ -1,0 +1,53 @@
+<div>
+	<div class="flex items-center gap-3 mb-2">
+		<span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-orange-50 text-orange-800 border border-orange-200">Image</span>
+	</div>
+	<h1 class="text-3xl font-black tracking-tight text-slate-900 mb-4">Image Generation</h1>
+	<p class="text-slate-600 mb-6 leading-relaxed">Generate images through an enabled image model. The router selects an active provider/model or uses the model specified in the request.</p>
+
+	<h2 class="text-xl font-bold text-slate-900 mb-3">Endpoint</h2>
+	<div class="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 mb-8 font-mono text-sm">
+		<span class="px-2.5 py-0.5 rounded text-xs font-extrabold text-white bg-emerald-600">POST</span>
+		<span class="text-slate-200">https://aiservice.prabisha.com/image</span>
+	</div>
+
+	<h2 class="text-xl font-bold text-slate-900 mb-3">Request</h2>
+	<p class="text-sm text-slate-600 mb-4">Send JSON and include the <code>X-API-Key</code> header. A prompt is required.</p>
+	<pre><code class="language-bash">curl -X POST https://aiservice.prabisha.com/image \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+	"prompt": "A small glass greenhouse in a rainy city at dusk",
+	"model": "gemini-3.1-flash-image",
+	"preferredProvider": "GEMINI",
+	"size": "1024x1024",
+	"quality": "standard",
+	"n": 1
+  }'</code></pre>
+
+	<h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Fields</h2>
+	<div class="overflow-x-auto border border-slate-200 rounded-xl mb-8">
+		<table class="min-w-full divide-y divide-slate-200 text-sm">
+			<thead class="bg-slate-50"><tr><th class="px-4 py-3 text-left">Field</th><th class="px-4 py-3 text-left">Type</th><th class="px-4 py-3 text-left">Details</th></tr></thead>
+			<tbody class="divide-y divide-slate-200 bg-white text-slate-600">
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">prompt</td><td class="px-4 py-3">string, required</td><td class="px-4 py-3">Description of the image to generate.</td></tr>
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">model</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Enabled image model ID. If omitted, the router selects an active default.</td></tr>
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">preferredProvider</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Optional provider name, such as <code>OPENAI</code> or <code>GEMINI</code>.</td></tr>
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">size</td><td class="px-4 py-3">string</td><td class="px-4 py-3"><code>256x256</code>, <code>512x512</code>, <code>1024x1024</code>, <code>1792x1024</code>, or <code>1024x1792</code>.</td></tr>
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">quality</td><td class="px-4 py-3">string</td><td class="px-4 py-3"><code>standard</code> or <code>hd</code>.</td></tr>
+				<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">n</td><td class="px-4 py-3">integer</td><td class="px-4 py-3">Requested count, from 1 to 10. Provider/model support may vary.</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2 class="text-xl font-bold text-slate-900 mb-3">Response</h2>
+	<pre><code class="language-json">{
+  "images": ["data:image/png;base64,..."],
+  "provider": "GEMINI",
+  "model": "gemini-3.1-flash-image",
+  "providerId": "provider-id",
+  "providerModelId": "provider-model-id",
+  "latency": 1820
+}</code></pre>
+	<p class="text-sm text-slate-600 mt-3">Each <code>images</code> entry is provider output and may be a data URL or URL. Handle large base64 data appropriately in your client.</p>
+</div>

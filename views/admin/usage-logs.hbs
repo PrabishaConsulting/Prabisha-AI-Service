@@ -1,40 +1,146 @@
-<div class="space-y-6">
-	<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-		<form method="get" action="/admin/usage-logs" class="flex flex-wrap items-end gap-3 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-			<label class="text-xs font-bold text-slate-500">Modality
-				<select name="modality" class="block mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-					<option value="">All</option>
-					<option value="TEXT" {{#if (eq filters.modality 'TEXT')}}selected{{/if}}>Text</option>
-					<option value="IMAGE" {{#if (eq filters.modality 'IMAGE')}}selected{{/if}}>Image</option>
-					<option value="EMBEDDING" {{#if (eq filters.modality 'EMBEDDING')}}selected{{/if}}>Embedding</option>
-				</select>
-			</label>
-			<label class="text-xs font-bold text-slate-500">Provider
-				<select name="providerId" class="block mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-					<option value="">All</option>
-					{{#each providers}}<option value="{{id}}" {{#if (eq ../filters.providerId id)}}selected{{/if}}>{{displayName}}</option>{{/each}}
-				</select>
-			</label>
-			<label class="text-xs font-bold text-slate-500">From<input type="date" name="from" value="{{filters.from}}" class="block mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"></label>
-			<label class="text-xs font-bold text-slate-500">To<input type="date" name="to" value="{{filters.to}}" class="block mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"></label>
-			<button class="px-4 py-2 rounded-lg text-sm font-bold text-white" style="background-color:#111CA8"><i class="fas fa-filter mr-1"></i>Filter</button>
-		</form>
-	</div>
+<div class="space-y-8 max-w-7xl mx-auto pb-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-3xl font-bold tracking-tight text-gray-900">Usage Logs</h2>
+        <p class="text-base text-gray-500 mt-1">Review detailed history of API requests, token usage, and costs.</p>
+    </div>
 
-	<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-		<div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs font-bold text-slate-400 uppercase">Total Cost</p><p class="text-2xl font-bold text-slate-900 mt-2">${{summary.cost}}</p></div>
-		<div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs font-bold text-slate-400 uppercase">Total Tokens</p><p class="text-2xl font-bold text-slate-900 mt-2">{{summary.tokens}}</p></div>
-		<div class="bg-white border border-slate-200 rounded-xl p-5"><p class="text-xs font-bold text-slate-400 uppercase">Average Latency</p><p class="text-2xl font-bold text-slate-900 mt-2">{{summary.latency}} ms</p></div>
-	</div>
+    <!-- Filter Form -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <form method="get" action="/admin/usage-logs" class="flex flex-col md:flex-row flex-wrap items-end gap-4">
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Type</label>
+                <select name="modality" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <option value="">All Types</option>
+                    <option value="TEXT" {{#if (eq filters.modality 'TEXT')}}selected{{/if}}>Text</option>
+                    <option value="IMAGE" {{#if (eq filters.modality 'IMAGE')}}selected{{/if}}>Image</option>
+                    <option value="EMBEDDING" {{#if (eq filters.modality 'EMBEDDING')}}selected{{/if}}>Embedding</option>
+                </select>
+            </div>
+            
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Provider</label>
+                <select name="providerId" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    <option value="">All Providers</option>
+                    {{#each providers}}
+                    <option value="{{id}}" {{#if (eq ../filters.providerId id)}}selected{{/if}}>{{displayName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">From Date</label>
+                <input type="date" name="from" value="{{filters.from}}" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+            </div>
+            
+            <div class="flex-1 min-w-[150px]">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">To Date</label>
+                <input type="date" name="to" value="{{filters.to}}" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+            </div>
+            
+            <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all shadow-sm whitespace-nowrap">
+                <i class="fas fa-filter mr-2"></i>Apply Filters
+            </button>
+        </form>
+    </div>
 
-	<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-x-auto">
-		<table class="min-w-full text-sm">
-			<thead class="bg-slate-50 border-b border-slate-200"><tr class="text-left text-xs uppercase tracking-wide text-slate-500"><th class="px-5 py-3">Time</th><th class="px-5 py-3">Request Origin</th><th class="px-5 py-3">Request</th><th class="px-5 py-3">Provider / Model</th><th class="px-5 py-3">Tokens</th><th class="px-5 py-3">Cost</th><th class="px-5 py-3">Latency</th><th class="px-5 py-3">Status</th></tr></thead>
-			<tbody class="divide-y divide-slate-100">
-				{{#each logs}}
-				<tr class="text-slate-700"><td class="px-5 py-4 whitespace-nowrap text-xs text-slate-500">{{formatTime createdAt}}</td><td class="px-5 py-4 max-w-xs"><span class="block truncate font-medium" title="{{requestOriginUrl}}">{{#if requestOriginUrl}}{{requestOriginUrl}}{{else}}Direct API client{{/if}}</span></td><td class="px-5 py-4"><span class="font-bold">{{modality}}</span><div class="text-xs text-slate-400">{{endpointPath}}</div></td><td class="px-5 py-4"><span class="font-bold">{{provider.displayName}}</span><div class="text-xs text-slate-400">{{providerModel.modelId}}</div></td><td class="px-5 py-4">{{totalTokens}}</td><td class="px-5 py-4 font-semibold">${{estimatedCostUsd}}</td><td class="px-5 py-4">{{latencyMs}} ms</td><td class="px-5 py-4"><span class="px-2 py-1 rounded text-xs font-bold {{#if (eq status 'SUCCESS')}}bg-emerald-50 text-emerald-700{{else}}bg-rose-50 text-rose-700{{/if}}">{{status}}</span></td></tr>
-				{{else}}<tr><td colspan="8" class="px-5 py-12 text-center text-slate-400">No usage logs match these filters.</td></tr>{{/each}}
-			</tbody>
-		</table>
-	</div>
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Cost</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">${{summary.cost}}</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Tokens</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{summary.tokens}}</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Avg Response Time</p>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{summary.latency}} ms</p>
+        </div>
+    </div>
+
+    <!-- Logs Table with Pagination -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4">Time</th>
+                        <th class="px-6 py-4">Source</th>
+                        <th class="px-6 py-4">Request</th>
+                        <th class="px-6 py-4">AI Model</th>
+                        <th class="px-6 py-4">Tokens</th>
+                        <th class="px-6 py-4">Cost</th>
+                        <th class="px-6 py-4">Speed</th>
+                        <th class="px-6 py-4">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-gray-600">
+                    {{#each logs}}
+                    <tr class="hover:bg-gray-50/80 transition-colors group">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">{{formatTime createdAt}}</td>
+                        <td class="px-6 py-4 max-w-[150px]">
+                            <span class="block truncate font-medium text-gray-900" title="{{requestOriginUrl}}">
+                                {{#if requestOriginUrl}}{{requestOriginUrl}}{{else}}Direct API{{/if}}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="font-semibold text-gray-900">{{modality}}</span>
+                            <div class="text-xs font-mono text-gray-400 mt-0.5">{{endpointPath}}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="font-semibold text-gray-900">{{provider.displayName}}</span>
+                            <div class="text-xs font-mono text-gray-400 mt-0.5">{{providerModel.modelId}}</div>
+                        </td>
+                        <td class="px-6 py-4 font-mono text-xs">{{totalTokens}}</td>
+                        <td class="px-6 py-4 font-mono font-semibold text-gray-900">${{estimatedCostUsd}}</td>
+                        <td class="px-6 py-4 font-mono text-xs">{{latencyMs}} ms</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide {{#if (eq status 'SUCCESS')}}bg-green-100 text-green-700{{else}}bg-red-100 text-red-700{{/if}}">
+                                {{status}}
+                            </span>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="8" class="px-6 py-16 text-center text-gray-500">
+                            <i class="fas fa-search text-gray-300 text-3xl mb-3 block"></i>
+                            <p class="text-base font-medium text-gray-900">No logs found</p>
+                            <p class="text-sm mt-1">Try adjusting your filters or date range.</p>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination Footer -->
+        {{#if pagination.totalPages}}
+        <div class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50/50 mt-auto">
+            <div class="text-sm text-gray-500">
+                Showing <span class="font-semibold text-gray-900">{{pagination.startItem}}</span> to <span class="font-semibold text-gray-900">{{pagination.endItem}}</span> of <span class="font-semibold text-gray-900">{{pagination.totalItems}}</span> results
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <!-- Previous Button -->
+                <a href="{{#if pagination.hasPrev}}?page={{pagination.prevPage}}&modality={{filters.modality}}&providerId={{filters.providerId}}&from={{filters.from}}&to={{filters.to}}{{else}}#{{/if}}" 
+                   class="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium transition-colors {{#if pagination.hasPrev}}text-gray-700 bg-white hover:bg-gray-50 hover:text-blue-600{{else}}text-gray-400 bg-gray-50 cursor-not-allowed{{/if}}">
+                    Previous
+                </a>
+                
+                <!-- Page Numbers (Optional: can be expanded based on your backend logic) -->
+                <div class="hidden sm:flex items-center px-4 py-2 text-sm font-medium text-gray-700">
+                    Page {{pagination.currentPage}} of {{pagination.totalPages}}
+                </div>
+                
+                <!-- Next Button -->
+                <a href="{{#if pagination.hasNext}}?page={{pagination.nextPage}}&modality={{filters.modality}}&providerId={{filters.providerId}}&from={{filters.from}}&to={{filters.to}}{{else}}#{{/if}}" 
+                   class="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium transition-colors {{#if pagination.hasNext}}text-gray-700 bg-white hover:bg-gray-50 hover:text-blue-600{{else}}text-gray-400 bg-gray-50 cursor-not-allowed{{/if}}">
+                    Next
+                </a>
+            </div>
+        </div>
+        {{/if}}
+    </div>
 </div>

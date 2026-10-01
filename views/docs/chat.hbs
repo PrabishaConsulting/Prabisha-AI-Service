@@ -5,13 +5,13 @@
     <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-4">Chat Completion API Layer</h1>
     
     <p class="text-slate-600 mb-6 leading-relaxed">
-        Dispatches message arrays through highly optimized connection instances with transparent execution retry layers handling cross-model transformations automatically.
+        Send a sequence of role/content messages to an enabled chat model. The response includes the generated content, provider, model, token usage, and latency.
     </p>
 
     <h2 class="text-xl font-bold text-slate-900 mb-3">Endpoint Structure</h2>
     <div class="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 mb-8 font-mono text-sm shadow-inner">
         <span class="px-2.5 py-0.5 rounded text-xs font-extrabold text-white bg-emerald-600">POST</span>
-        <span class="text-slate-200">/api/chat</span>
+        <span class="text-slate-200">https://aiservice.prabisha.com/chat</span>
     </div>
 
     <h2 class="text-xl font-bold text-slate-900 mb-3">Payload Paradigm Spec</h2>
@@ -22,7 +22,7 @@
       "content": "Explain core caching patterns."
     }
   ],
-  "model": "gpt-4o",
+    "model": "gemini-2.5-flash",
   "temperature": 0.7,
   "maxTokens": 1000,
   "preferredProvider": "OPENAI"
@@ -44,13 +44,13 @@
                     <td class="px-4 py-3 font-semibold text-slate-900">messages</td>
                     <td class="px-4 py-3 font-mono text-xs">Array</td>
                     <td class="px-4 py-3 text-orange-600 font-medium">True</td>
-                    <td class="px-4 py-3 text-xs">Objects array processing <code>role</code> and context strings.</td>
+                    <td class="px-4 py-3 text-xs">Required. Each item has a <code>role</code> and <code>content</code>; common roles are <code>user</code> and <code>assistant</code>.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-900">model</td>
                     <td class="px-4 py-3 font-mono text-xs">String</td>
                     <td class="px-4 py-3 text-slate-400">False</td>
-                    <td class="px-4 py-3 text-xs">Target system weights string tag (e.g. <code>claude-3-5-sonnet</code>).</td>
+                    <td class="px-4 py-3 text-xs">Optional enabled model ID. If omitted, the router selects an active default text model.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-900">temperature</td>
@@ -64,6 +64,11 @@
                     <td class="px-4 py-3 text-slate-400">False</td>
                     <td class="px-4 py-3 text-xs">Target strict routing bypass parameters: <code>OPENAI</code>, <code>GEMINI</code>, etc.</td>
                 </tr>
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-slate-900">maxTokens</td>
+                    <td class="px-4 py-3 font-mono text-xs">Number</td>
+                    <td class="px-4 py-3 text-xs">Optional positive output token limit. Provider support may vary.</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -74,7 +79,10 @@
   "data": {
     "content": "Systems logic returned successfully.",
     "model": "gpt-4o",
-    "provider": "OPENAI",
+    "providerName": "GEMINI",
+    "providerId": "provider-id",
+    "providerModelId": "provider-model-id",
+    "fallbackChain": ["GEMINI"],
     "usage": {
       "promptTokens": 15,
       "completionTokens": 120,
@@ -89,7 +97,7 @@
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h3 class="text-lg font-bold text-white tracking-tight">API Request Sandbox Terminal</h3>
-                    <p class="text-xs text-slate-400">Dispatch live exploratory testing requests directly across node loops.</p>
+                    <p class="text-xs text-slate-400">Send a live request to the production chat endpoint.</p>
                 </div>
                 <i class="fas fa-terminal text-slate-700 text-xl"></i>
             </div>
@@ -100,7 +108,7 @@
                     <input type="password" id="apiKeyInput" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition" placeholder="Paste structural X-API-Key string context">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Prompt Input String Area</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Message</label>
                     <textarea id="messageInput" rows="3" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition placeholder:text-slate-600" placeholder="Ask anything...">Explain quantum computing structure simply.</textarea>
                 </div>
                 
@@ -125,15 +133,15 @@ async function testChatAPI() {
     const responseContent = document.getElementById('responseContent');
     
     if (!apiKey) {
-        alert('Credentials required context dropped.');
+        alert('Enter an API key to send a test request.');
         return;
     }
     
     try {
-        responseContent.textContent = "Processing active connection vectors...";
+        responseContent.textContent = "Sending request...";
         responseArea.classList.remove('hidden');
         
-        const response = await axios.post('/api/chat', {
+        const response = await axios.post('https://aiservice.prabisha.com/chat', {
             messages: [{ role: 'user', content: message }],
             temperature: 0.7
         }, {
