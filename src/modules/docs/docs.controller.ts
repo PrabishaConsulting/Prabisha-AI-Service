@@ -49,6 +49,15 @@ export class DocsController {
     };
   }
 
+  @Get('documents')
+  @Render('docs/documents')
+  async getDocuments() {
+    return {
+      title: 'Document Parsing API - Documentation',
+      layout: 'layouts/docs',
+    };
+  }
+
   @Get('rate-limits')
   @Render('docs/rate-limits')
   async getRateLimits() {

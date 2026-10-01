@@ -1,0 +1,53 @@
+<div>
+		<div class="flex items-center gap-3 mb-2">
+				<span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-indigo-50 text-indigo-800 border border-indigo-200">Embeddings</span>
+		</div>
+		<h1 class="text-3xl font-black tracking-tight text-slate-900 mb-4">Text Embeddings</h1>
+		<p class="text-slate-600 mb-6 leading-relaxed">Convert one or more text inputs to vectors using an enabled embedding model. For a batch input, the response contains one vector per input.</p>
+
+		<h2 class="text-xl font-bold text-slate-900 mb-3">Endpoint</h2>
+		<div class="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 mb-8 font-mono text-sm">
+				<span class="px-2.5 py-0.5 rounded text-xs font-extrabold text-white bg-emerald-600">POST</span>
+				<span class="text-slate-200">https://aiservice.prabisha.com/embeddings</span>
+		</div>
+
+		<h2 class="text-xl font-bold text-slate-900 mb-3">Request</h2>
+		<pre><code class="language-bash">curl -X POST https://aiservice.prabisha.com/embeddings \
+	-H "X-API-Key: YOUR_API_KEY" \
+	-H "Content-Type: application/json" \
+	-d '{
+		"input": ["First text to embed", "Another text to embed"],
+		"model": "gemini-embedding-2-preview",
+		"preferredProvider": "GEMINI"
+	}'</code></pre>
+
+		<h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Fields</h2>
+		<div class="overflow-hidden border border-slate-200 rounded-xl mb-8">
+				<table class="min-w-full divide-y divide-slate-200 text-sm">
+						<thead class="bg-slate-50"><tr><th class="px-4 py-3 text-left">Field</th><th class="px-4 py-3 text-left">Type</th><th class="px-4 py-3 text-left">Details</th></tr></thead>
+						<tbody class="divide-y divide-slate-200 bg-white text-slate-600">
+								<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">input</td><td class="px-4 py-3">string or string[]</td><td class="px-4 py-3">One text value or a batch of text values. Required.</td></tr>
+								<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">model</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Enabled embedding model ID. If omitted, the router selects an active default.</td></tr>
+								<tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">preferredProvider</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Optional provider name, such as <code>OPENAI</code> or <code>GEMINI</code>.</td></tr>
+						</tbody>
+				</table>
+		</div>
+
+		<h2 class="text-xl font-bold text-slate-900 mb-3">Response</h2>
+		<pre><code class="language-json">{
+	"embeddings": [
+		[0.012, -0.034, 0.056],
+		[0.021, 0.018, -0.043]
+	],
+	"provider": "GEMINI",
+	"model": "gemini-embedding-2-preview",
+	"usage": {
+		"promptTokens": 0,
+		"totalTokens": 0
+	},
+	"providerId": "provider-id",
+	"providerModelId": "provider-model-id",
+	"latency": 240
+}</code></pre>
+		<p class="text-sm text-slate-600 mt-3">Vector dimensions and token accounting depend on the selected provider and model.</p>
+</div>

@@ -1,13 +1,13 @@
 <div>
     <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3">Rate Limits & Traffic Policing</h1>
     <p class="text-slate-600 mb-8 leading-relaxed">
-        Throttling layers guard internal system microservices from token drain trends. Requests matching parameters inside downstream routing pools increment core sliding windows using Redis key sets.
+        API-key limits are checked before AI provider work. The key record can define requests per minute (RPM) and requests per day (RPD); configured limits are enforced across the API-key guarded endpoints.
     </p>
 
     <div class="border border-amber-200 bg-amber-50/50 rounded-xl p-4 mb-8 flex gap-3 items-start">
         <i class="fas fa-tachometer-alt text-amber-600 mt-0.5"></i>
         <p class="text-amber-900 text-sm leading-relaxed">
-            <strong>Key Isolation Policies:</strong> Threshold evaluation bounds evaluate strictly per unique configuration key token array context. Tier escalation modifications alter metric shapes instantly.
+            <strong>Per-key settings:</strong> Configure RPM and RPD from the API Keys page. Changing a key's limits applies to subsequent requests. Empty limits mean no per-key cap for that window.
         </p>
     </div>
 
@@ -25,41 +25,34 @@
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-900">Requests per Minute (RPM)</td>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-slate-800">60 reqs/min</td>
-                    <td class="px-4 py-3">Resets on a moving window loop layer per 60s.</td>
+                    <td class="px-4 py-3">Counter resets 60 seconds after the bucket reset time.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-900">Requests per Day (RPD)</td>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-slate-800">1,000 reqs/day</td>
-                    <td class="px-4 py-3">Resets completely at 00:00 UTC cycle ticks.</td>
+                    <td class="px-4 py-3">Counter resets 24 hours after the bucket reset time; this is not a midnight UTC reset.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-semibold text-slate-900">Monthly Token Volume Limit</td>
-                    <td class="px-4 py-3 font-mono text-xs text-orange-600 font-bold">Dynamic Allocation</td>
-                    <td class="px-4 py-3">Configured individually within internal database tables.</td>
+                    <td class="px-4 py-3 font-mono text-xs text-slate-600">Not enforced</td>
+                    <td class="px-4 py-3">A monthly token value can be stored on a key, but it is not currently checked by request handling.</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <h2 class="text-xl font-bold text-slate-900 mb-3">Monitoring Header Streams</h2>
-    <p class="text-sm text-slate-600 mb-4">Track metrics dynamically during payload streams using system transaction headers:</p>
-    <pre><code class="language-bash">X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 58
-X-RateLimit-Reset: 1635200000
-Retry-After: 120</code></pre>
-
-    <h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Overhead Response Packet Shape</h2>
-    <p class="text-sm text-slate-600 mb-4">When parameters exceed standard traffic metrics, execution routes error patterns instantly with code <code>429</code>:</p>
+        <h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Limit Exceeded</h2>
+        <p class="text-sm text-slate-600 mb-4">When a configured RPM or RPD limit is reached, the gateway responds with HTTP <code>429</code>. The response does not currently include rate-limit headers.</p>
     <pre><code class="language-json">{
   "statusCode": 429,
-  "message": "Too many requests. Please try again later.",
-  "retryAfter": 120
+    "message": "API key requests-per-minute limit exceeded",
+    "error": "Too Many Requests"
 }</code></pre>
 
     <div class="border-l-4 p-4 mt-6 rounded-r-xl bg-emerald-50/60 border-emerald-500 flex gap-3 items-start">
         <i class="fas fa-lightbulb text-emerald-600 mt-0.5"></i>
         <p class="text-emerald-950 text-sm leading-relaxed">
-            <strong>Architecture Recommendation:</strong> Implement standard exponential backoff delay routines when handling consumer execution threads to buffer payload re-transmission safely.
+            <strong>Client guidance:</strong> Wait for the documented window to reset before retrying. Use bounded exponential backoff for transient 429 responses.
         </p>
     </div>
 </div>

@@ -1,53 +1,56 @@
-<div class="space-y-6">
+<div class="space-y-8 max-w-7xl mx-auto pb-10">
+    <!-- Header Section -->
     <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
-            <h2 class="text-2xl font-bold tracking-tight text-slate-900">System API Key Management</h2>
-            <p class="text-sm text-slate-500 mt-0.5">Provision and supervise internal security layer credentials config signatures.</p>
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900">API Key Management</h2>
+            <p class="text-base text-gray-500 mt-1">Create and manage API keys for your applications.</p>
         </div>
-        <button onclick="showCreateKeyModal()" class="inline-flex items-center justify-center font-semibold text-xs text-white px-4 py-2.5 rounded-lg transition-transform hover:scale-[1.02] active:scale-100 shadow-sm" style="background-color: #111CA8;">
-            <i class="fas fa-plus mr-2"></i>Provision Token Secret
+        <button onclick="showCreateKeyModal()" class="inline-flex items-center justify-center font-medium text-sm text-white px-5 py-2.5 rounded-xl transition-all hover:bg-blue-700 hover:shadow-md active:scale-95 bg-blue-600 shadow-sm">
+            <i class="fas fa-plus mr-2"></i>New API Key
         </button>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Active Sets</span>
-            <p class="text-2xl font-black text-slate-900 mt-1">{{stats.totalKeys}}</p>
+    <!-- Stats Overview Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Keys</span>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{stats.totalKeys}}</p>
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Live Verified Roots</span>
-            <p class="text-2xl font-black text-emerald-600 mt-1">{{stats.activeKeys}}</p>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Active Keys</span>
+            <p class="text-3xl font-bold text-green-600 mt-2">{{stats.activeKeys}}</p>
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Aggregated Loads</span>
-            <p class="text-2xl font-black text-slate-900 mt-1">{{stats.totalCalls}}</p>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Requests</span>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{stats.totalCalls}}</p>
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Token Accruals</span>
-            <p class="text-2xl font-black text-slate-900 mt-1">${{formatNumber stats.totalCost}}</p>
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Cost</span>
+            <p class="text-3xl font-bold text-gray-900 mt-2">${{formatNumber stats.totalCost}}</p>
         </div>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <!-- API Keys Table -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="w-full text-left border-collapse text-sm">
                 <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider">
-                        <th class="px-6 py-3.5">Identifier Name</th>
-                        <th class="px-6 py-3.5">Prefix Token</th>
-                        <th class="px-6 py-3.5">User Identity Reference</th>
-                        <th class="px-6 py-3.5">Assigned Scopes</th>
-                        <th class="px-6 py-3.5">Redis Rate Rules</th>
-                        <th class="px-6 py-3.5">Usage Calls</th>
-                        <th class="px-6 py-3.5">Status</th>
-                        <th class="px-6 py-3.5">Terminal Use</th>
-                        <th class="px-6 py-3.5">Lifespan Expiry</th>
-                        <th class="px-6 py-3.5 text-right">Actions</th>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4">Name</th>
+                        <th class="px-6 py-4">Key Prefix</th>
+                        <th class="px-6 py-4">Created By</th>
+                        <th class="px-6 py-4">Permissions</th>
+                        <th class="px-6 py-4">Rate Limits</th>
+                        <th class="px-6 py-4">Usage</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Last Used</th>
+                        <th class="px-6 py-4">Expires</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-slate-600 font-medium">
+                <tbody class="divide-y divide-gray-100 text-gray-600">
                     {{#each apiKeys}}
-                    <tr class="hover:bg-slate-50/50 transition-colors"
+                    <tr class="hover:bg-gray-50/80 transition-colors group"
                         data-api-key-id="{{id}}"
                         data-api-key-name="{{name}}"
                         data-api-key-scopes="{{#each scopes}}{{this}}{{#unless @last}},{{/unless}}{{/each}}"
@@ -55,57 +58,63 @@
                         data-api-key-rpd-limit="{{rpdLimit}}"
                         data-api-key-monthly-token-limit="{{#if monthlyTokenLimit}}{{monthlyTokenLimit}}{{/if}}"
                         data-api-key-expires-at="{{expiresAt}}">
-                        <td class="px-6 py-4 font-bold text-slate-900">{{name}}</td>
-                        <td class="px-6 py-4"><code class="font-mono text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/60">{{keyPrefix}}...</code></td>
+                        
+                        <td class="px-6 py-4 font-semibold text-gray-900">{{name}}</td>
                         <td class="px-6 py-4">
-                            <div class="text-slate-900 font-semibold">{{user.email}}</div>
-                            <div class="text-[10px] text-slate-400 font-medium mt-0.5">{{user.name}}</div>
+                            <code class="font-mono text-xs text-gray-700 bg-gray-100 px-2 py-1 rounded border border-gray-200">{{keyPrefix}}...</code>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="flex flex-wrap gap-1 max-w-[150px]">
+                            <div class="text-gray-900 font-medium">{{user.email}}</div>
+                            <div class="text-xs text-gray-500 mt-0.5">{{user.name}}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1.5 max-w-[160px]">
                                 {{#each scopes}}
-                                <span class="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px] font-bold text-slate-700 tracking-tight">{{this}}</span>
+                                <span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-xs font-medium text-gray-700">{{this}}</span>
                                 {{/each}}
                             </div>
                         </td>
-                        <td class="px-6 py-4 font-medium text-slate-500">
-                            <div class="flex items-center gap-1"><i class="fas fa-bolt text-[10px] w-3"></i> {{#if rpmLimit}}{{rpmLimit}} RPM{{else}}No RPM cap{{/if}}</div>
-                            <div class="flex items-center gap-1 mt-1"><i class="fas fa-calendar text-[10px] w-3"></i> {{#if rpdLimit}}{{rpdLimit}} RPD{{else}}No daily cap{{/if}}</div>
-                            <div class="flex items-center gap-1 mt-1"><i class="fas fa-coins text-[10px] w-3"></i> {{#if monthlyTokenLimit}}{{monthlyTokenLimit}}{{else}}No cap{{/if}} monthly tokens</div>
+                        <td class="px-6 py-4 text-xs text-gray-500 space-y-1">
+                            <div class="flex items-center gap-1.5"><i class="fas fa-bolt w-3 text-gray-400"></i> {{#if rpmLimit}}{{rpmLimit}} RPM{{else}}Unlimited RPM{{/if}}</div>
+                            <div class="flex items-center gap-1.5"><i class="fas fa-calendar-day w-3 text-gray-400"></i> {{#if rpdLimit}}{{rpdLimit}} RPD{{else}}Unlimited Daily{{/if}}</div>
+                            <div class="flex items-center gap-1.5"><i class="fas fa-coins w-3 text-gray-400"></i> {{#if monthlyTokenLimit}}{{monthlyTokenLimit}}{{else}}Unlimited{{/if}} Tokens</div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="font-bold text-slate-900">{{usageCount}}</span> calls
+                            <span class="font-semibold text-gray-900">{{usageCount}}</span> calls
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2 py-0.5 font-bold rounded uppercase text-[9px] tracking-wider border
-                                {{#if (eq status 'ACTIVE')}}bg-emerald-50 text-emerald-800 border-emerald-200{{/if}}
-                                {{#if (eq status 'REVOKED')}}bg-rose-50 text-rose-800 border-rose-200{{/if}}
-                                {{#if (eq status 'EXPIRED')}}bg-slate-100 text-slate-800 border-slate-200{{/if}}">
+                            <span class="inline-flex items-center px-2.5 py-1 font-semibold rounded-full uppercase text-xs tracking-wide
+                                {{#if (eq status 'ACTIVE')}}bg-green-100 text-green-700{{/if}}
+                                {{#if (eq status 'REVOKED')}}bg-red-100 text-red-700{{/if}}
+                                {{#if (eq status 'EXPIRED')}}bg-gray-100 text-gray-700{{/if}}">
                                 {{status}}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-slate-500 font-mono">{{#if lastUsedAt}}{{formatTime lastUsedAt}}{{else}}Never{{/if}}</td>
-                        <td class="px-6 py-4 font-medium">
+                        <td class="px-6 py-4 text-gray-500 font-mono text-xs">{{#if lastUsedAt}}{{formatTime lastUsedAt}}{{else}}Never{{/if}}</td>
+                        <td class="px-6 py-4 font-medium text-xs">
                             {{#if expiresAt}}
-                            <span class="{{#if (isExpired expiresAt)}}text-rose-600 font-semibold{{else}}text-amber-600{{/if}}">
+                            <span class="{{#if (isExpired expiresAt)}}text-red-600 font-semibold{{else}}text-orange-600{{/if}}">
                                 {{formatDate expiresAt}}
                             </span>
                             {{else}}
-                            <span class="text-emerald-600 font-semibold">Infinite</span>
+                            <span class="text-green-600 font-semibold">Never</span>
                             {{/if}}
                         </td>
-                        <td class="px-6 py-4 text-right space-x-1.5 font-bold text-sm">
-                            <button type="button" title="Edit API key and rate limits" onclick="editKey(this)" class="text-slate-400 hover:text-slate-950 transition-colors"><i class="fas fa-edit"></i></button>
-                            <button type="button" title="Revoke API key" onclick="revokeKey(this)" class="text-slate-400 hover:text-amber-600 transition-colors"><i class="fas fa-ban"></i></button>
-                            <button type="button" title="Permanently delete API key and usage history" onclick="permanentlyDeleteKey(this)" class="text-slate-400 hover:text-rose-600 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <button type="button" title="Edit API Key" onclick="editKey(this)" class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"><i class="fas fa-edit"></i></button>
+                            <button type="button" title="Revoke API Key" onclick="revokeKey(this)" class="p-1.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"><i class="fas fa-ban"></i></button>
+                            <button type="button" title="Delete API Key" onclick="permanentlyDeleteKey(this)" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                     {{else}}
                     <tr>
-                        <td colspan="10" class="px-6 py-16 text-center text-slate-400">
-                            <i class="fas fa-key text-3xl text-slate-200 mb-3 block"></i>
-                            <p class="font-medium text-sm">No localized API keys identified inside standard DB cluster models.</p>
-                            <button onclick="showCreateKeyModal()" class="mt-2 text-xs font-bold underline" style="color: #111CA8;">Instantiate primary configuration key token</button>
+                        <td colspan="10" class="px-6 py-16 text-center text-gray-500">
+                            <div class="w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+                                <i class="fas fa-key text-2xl"></i>
+                            </div>
+                            <p class="font-medium text-base text-gray-900 mb-1">No API keys found</p>
+                            <p class="text-sm mb-4">You haven't created any API keys yet.</p>
+                            <button onclick="showCreateKeyModal()" class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">Create your first API key</button>
                         </td>
                     </tr>
                     {{/each}}
@@ -115,148 +124,153 @@
     </div>
 </div>
 
-<!-- Background overlay (handles click to close with backdrop blur) -->
-<div id="createKeyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-y-auto backdrop-filter backdrop-blur-sm" onclick="closeModal()">
-    <div class="flex items-start justify-center min-h-screen p-4">
-        <!-- Modal Content (stops click from bubbling to background) -->
-        <div class="bg-white border border-slate-200 rounded-xl max-w-xl w-full shadow-2xl my-12 overflow-hidden" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-100 bg-slate-50">
-                <h3 class="text-sm font-bold text-slate-900 tracking-tight" id="modalTitle">Instantiate New API Target Key</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+<!-- Create/Edit Key Modal -->
+<div id="createKeyModal" class="fixed inset-0 bg-gray-900/60 hidden z-50 overflow-y-auto backdrop-blur-sm transition-opacity" onclick="closeModal()">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden transform transition-all" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                <h3 class="text-lg font-bold text-gray-900" id="modalTitle">Create New API Key</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-2 rounded-full transition-colors"><i class="fas fa-times"></i></button>
             </div>
             
-            <form id="createKeyForm" class="p-6 space-y-5 text-sm">
+            <form id="createKeyForm" class="p-6 space-y-6 text-sm">
                 <input type="hidden" id="editKeyId">
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Key Label Target *</label>
-                    <input type="text" id="keyName" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium" placeholder="e.g. Core Production Framework Gateway Key">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Key Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="keyName" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" placeholder="e.g. Production Web App">
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Permitted Action Scopes</label>
-                    <div class="grid grid-cols-2 gap-2 font-medium text-xs text-slate-700">
-                        <label class="flex items-center px-3 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition">
-                            <input type="checkbox" value="CHAT" class="scope-checkbox mr-2.5 rounded text-indigo-900 focus:ring-0">
-                            <span>💬 Chat Endpoint Layer</span>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Permissions</label>
+                    <div class="grid grid-cols-2 gap-3 font-medium text-gray-700">
+                        <label class="flex items-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50">
+                            <input type="checkbox" value="CHAT" class="scope-checkbox mr-3 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            <span>💬 Chat API</span>
                         </label>
-                        <label class="flex items-center px-3 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition">
-                            <input type="checkbox" value="IMAGE" class="scope-checkbox mr-2.5 rounded text-indigo-900 focus:ring-0">
-                            <span>🎨 Image Automation</span>
+                        <label class="flex items-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50">
+                            <input type="checkbox" value="IMAGE" class="scope-checkbox mr-3 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            <span>🎨 Image Generation</span>
                         </label>
-                        <label class="flex items-center px-3 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition">
-                            <input type="checkbox" value="VIDEO" class="scope-checkbox mr-2.5 rounded text-indigo-900 focus:ring-0">
-                            <span>🎬 Video Stream Engine</span>
+                        <label class="flex items-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50">
+                            <input type="checkbox" value="VIDEO" class="scope-checkbox mr-3 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            <span>🎬 Video Processing</span>
                         </label>
-                        <label class="flex items-center px-3 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition">
-                            <input type="checkbox" value="EMBEDDINGS" class="scope-checkbox mr-2.5 rounded text-indigo-900 focus:ring-0">
-                            <span>🔢 Embeddings Matrices</span>
+                        <label class="flex items-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50">
+                            <input type="checkbox" value="EMBEDDINGS" class="scope-checkbox mr-3 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                            <span>🔢 Embeddings</span>
                         </label>
                     </div>
                 </div>
                 
-                <div class="border-t border-slate-100 pt-4">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Rate Limit Settings</h4>
+                <div class="border-t border-gray-100 pt-5">
+                    <h4 class="text-sm font-semibold text-gray-900 mb-3">Rate Limits</h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Requests / Minute (RPM)</label>
-                            <input type="number" id="rpmLimit" min="1" value="60" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Requests / Minute (RPM)</label>
+                            <input type="number" id="rpmLimit" min="1" value="60" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Requests / Day (RPD)</label>
-                            <input type="number" id="rpdLimit" min="1" value="1000" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Requests / Day (RPD)</label>
+                            <input type="number" id="rpdLimit" min="1" value="1000" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                         </div>
                     </div>
                 </div>
                 
-                <div class="border-t border-slate-100 pt-4">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Usage Ceiling Threshold</h4>
-                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Monthly Max Volumetric Tokens</label>
-                    <input type="number" id="monthlyTokenLimit" min="1" step="1" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium" placeholder="No monthly token cap">
+                <div class="border-t border-gray-100 pt-5">
+                    <h4 class="text-sm font-semibold text-gray-900 mb-3">Usage Limits</h4>
+                    <label class="block text-xs font-medium text-gray-500 mb-1.5">Max Tokens per Month</label>
+                    <input type="number" id="monthlyTokenLimit" min="1" step="1" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" placeholder="Leave empty for no limit">
                 </div>
                 
-                <div class="border-t border-slate-100 pt-4">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Lifespan Limits Parameters</h4>
+                <div class="border-t border-gray-100 pt-5">
+                    <h4 class="text-sm font-semibold text-gray-900 mb-3">Expiration Settings</h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Relative Lifespan (Days)</label>
-                            <input type="number" id="expiresIn" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium" placeholder="Infinite parameters">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Expires In (Days)</label>
+                            <input type="number" id="expiresIn" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all" placeholder="e.g. 30 (Leave empty for never)">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Target End Timestamp</label>
-                            <input type="date" id="expiresAt" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-slate-400 font-medium">
+                            <label class="block text-xs font-medium text-gray-500 mb-1.5">Or Specific Date</label>
+                            <input type="date" id="expiresAt" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
                         </div>
                     </div>
                 </div>
                 
-                <div class="flex gap-2 justify-end pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-xs font-bold border border-slate-200 rounded-lg hover:bg-slate-50 transition">Cancel View</button>
-                    <button type="submit" class="px-4 py-2 text-xs font-bold text-white rounded-lg transition" style="background-color: #111CA8;">Finalize Properties Setup</button>
+                <div class="flex gap-3 justify-end pt-5 border-t border-gray-100">
+                    <button type="button" onclick="closeModal()" class="px-5 py-2.5 text-sm font-medium border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm">Save API Key</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div id="keyDisplayModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closeKeyDisplayModal()">
-    <div class="bg-white border border-slate-200 rounded-xl max-w-md w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
-        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-100">
-            <i class="fas fa-check text-lg"></i>
+<!-- Display Key Modal -->
+<div id="keyDisplayModal" class="fixed inset-0 bg-gray-900/60 hidden z-50 flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeKeyDisplayModal()">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl p-8 text-center" onclick="event.stopPropagation()">
+        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-5">
+            <i class="fas fa-check text-2xl"></i>
         </div>
-        <h3 class="text-base font-bold text-slate-900 mb-1">Cryptographic Base Secret Generated</h3>
-        <p class="text-xs text-slate-500 px-4 mb-5">Ensure properties values are copied to backup servers instantly. Database tracking strings render masked after this action context completes.</p>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">API Key Generated</h3>
+        <p class="text-sm text-gray-500 mb-6">Please copy your new API key now. For your security, it won't be shown again.</p>
         
-        <div class="bg-slate-950 text-emerald-400 p-3 rounded-lg font-mono text-xs break-all border border-slate-800 text-left mb-5 select-all shadow-inner">
+        <div class="bg-gray-900 text-green-400 p-4 rounded-xl font-mono text-sm break-all text-left mb-6 select-all shadow-inner relative group">
             <code id="generatedKey"></code>
+            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded">Click to highlight</span>
+            </div>
         </div>
         
-        <div class="flex gap-2">
-            <button onclick="copyToClipboard()" class="flex-1 font-bold text-xs text-white py-2.5 rounded-lg transition" style="background-color: #111CA8;"><i class="fas fa-copy mr-2"></i>Copy String</button>
-            <button onclick="closeKeyDisplayModal()" class="flex-1 font-bold text-xs border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition">Dismiss View</button>
+        <div class="flex gap-3">
+            <button onclick="copyApiKeyToClipboard()" class="flex-1 font-medium text-sm text-white bg-blue-600 py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
+                <i class="fas fa-copy mr-2"></i>Copy Key
+            </button>
+            <button onclick="closeKeyDisplayModal()" class="flex-1 font-medium text-sm border border-gray-300 text-gray-700 py-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                Close
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Custom Revoke Key Modal -->
-<div id="revokeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closeRevokeModal()">
-    <div class="bg-white border border-slate-200 rounded-xl max-w-sm w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
-        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
-            <i class="fas fa-exclamation-triangle text-base"></i>
+<!-- Revoke Key Modal -->
+<div id="revokeModal" class="fixed inset-0 bg-gray-900/60 hidden z-50 flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closeRevokeModal()">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl p-6 text-center" onclick="event.stopPropagation()">
+        <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle text-xl"></i>
         </div>
-        <h3 class="text-base font-bold text-slate-900 mb-1">Revoke API Key?</h3>
-        <p class="text-xs text-slate-500 mb-4">Are you sure you want to revoke <strong id="revokeKeyNameDisplay" class="text-slate-900"></strong>? This cannot be undone.</p>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Revoke API Key?</h3>
+        <p class="text-sm text-gray-500 mb-6">Are you sure you want to revoke <strong id="revokeKeyNameDisplay" class="text-gray-900"></strong>? Apps using this key will lose access immediately.</p>
         
-        <div class="flex gap-3 w-full mt-2">
-            <button type="button" onclick="closeRevokeModal()" class="flex-1 font-bold text-xs border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition">Cancel</button>
-            
-            <!-- Fixed button with inline style to prevent Tailwind JIT compilation misses -->
-            <button type="button" onclick="confirmRevokeKey()" class="flex-1 font-bold text-xs text-white py-2.5 rounded-lg transition hover:opacity-90 shadow-sm" style="background-color: #e11d48;">Revoke Key</button>
+        <div class="flex gap-3 w-full">
+            <button type="button" onclick="closeRevokeModal()" class="flex-1 font-medium text-sm border border-gray-300 text-gray-700 py-2.5 rounded-xl hover:bg-gray-50 transition-colors">Cancel</button>
+            <button type="button" onclick="confirmRevokeKey()" class="flex-1 font-medium text-sm text-white bg-orange-600 py-2.5 rounded-xl hover:bg-orange-700 transition-colors shadow-sm">Revoke Key</button>
         </div>
     </div>
 </div>
 
-<div id="permanentDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-filter backdrop-blur-sm" onclick="closePermanentDeleteModal()">
-    <div class="bg-white border border-slate-200 rounded-xl max-w-sm w-full shadow-2xl p-6 text-center text-sm" onclick="event.stopPropagation()">
-        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
-            <i class="fas fa-trash-alt text-base"></i>
+<!-- Delete Key Modal -->
+<div id="permanentDeleteModal" class="fixed inset-0 bg-gray-900/60 hidden z-50 flex items-center justify-center backdrop-blur-sm transition-opacity" onclick="closePermanentDeleteModal()">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl p-6 text-center" onclick="event.stopPropagation()">
+        <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-trash-alt text-xl"></i>
         </div>
-        <h3 class="text-base font-bold text-slate-900 mb-1">Permanently Delete API Key?</h3>
-        <p class="text-xs text-slate-500 mb-4">Delete <strong id="permanentDeleteKeyName" class="text-slate-900"></strong> and its associated usage history. This cannot be undone.</p>
-        <div class="flex gap-3 w-full mt-2">
-            <button type="button" onclick="closePermanentDeleteModal()" class="flex-1 font-bold text-xs border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition">Cancel</button>
-            <button type="button" onclick="confirmPermanentDeleteKey()" class="flex-1 font-bold text-xs text-white py-2.5 rounded-lg transition hover:opacity-90 shadow-sm" style="background-color: #e11d48;">Delete Permanently</button>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Delete API Key?</h3>
+        <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete <strong id="permanentDeleteKeyName" class="text-gray-900"></strong> and its usage history? This cannot be undone.</p>
+        <div class="flex gap-3 w-full">
+            <button type="button" onclick="closePermanentDeleteModal()" class="flex-1 font-medium text-sm border border-gray-300 text-gray-700 py-2.5 rounded-xl hover:bg-gray-50 transition-colors">Cancel</button>
+            <button type="button" onclick="confirmPermanentDeleteKey()" class="flex-1 font-medium text-sm text-white bg-red-600 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-sm">Delete</button>
         </div>
     </div>
 </div>
 
 <script>
-    // System operational script arrays are sustained safely from native view logic contexts natively.
     let generatedRawKey = '';
     let currentRevokeKeyId = null;
     let currentPermanentDeleteKeyId = null;
 
     function showCreateKeyModal() {
-        document.getElementById('modalTitle').innerHTML = 'Instantiate New API Target Key';
+        document.getElementById('modalTitle').innerHTML = 'Create New API Key';
         document.getElementById('createKeyForm').reset();
         document.getElementById('editKeyId').value = '';
         document.getElementById('rpmLimit').value = '60';
@@ -272,17 +286,31 @@
         location.reload();
     }
 
-    function copyToClipboard() {
+    async function copyApiKeyToClipboard() {
         if (!generatedRawKey) {
             return typeof showToast === 'function' ? showToast('No API key available to copy', 'error') : alert('No API key available to copy');
         }
 
-        navigator.clipboard.writeText(generatedRawKey);
-        
-        if(typeof showToast === 'function') {
-            showToast('API key copied to clipboard', 'success');
-        } else {
-            alert('API hash string piped safely to system clipboard framework structures.');
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(generatedRawKey);
+            } else {
+                const input = document.createElement('textarea');
+                input.value = generatedRawKey;
+                input.setAttribute('readonly', '');
+                input.style.position = 'fixed';
+                input.style.opacity = '0';
+                document.body.appendChild(input);
+                input.select();
+                const copied = document.execCommand('copy');
+                input.remove();
+                if (!copied) throw new Error('Clipboard access was denied');
+            }
+
+            if (typeof showToast === 'function') showToast('API key copied to clipboard', 'success');
+        } catch (error) {
+            console.error('API key clipboard copy failed:', error);
+            if (typeof showToast === 'function') showToast('Copy failed. Select and copy the key from the dialog.', 'error');
         }
     }
 
@@ -330,7 +358,6 @@
         }
 
         const payload = { name, scopes, rpmLimit, rpdLimit, monthlyTokenLimit, expiresAt: expiresAt || null };
-
         const url = editKeyId ? `/admin/api/keys/${editKeyId}` : '/admin/api/keys';
         const method = editKeyId ? 'PUT' : 'POST';
 
@@ -352,7 +379,10 @@
                 return location.reload();
             }
 
-            generatedRawKey = result.rawKey || '';
+            generatedRawKey = result.rawKey ?? result.apiKey?.rawKey ?? '';
+            if (typeof generatedRawKey !== 'string' || generatedRawKey.length === 0) {
+                throw new Error('The server did not return the generated API key. Check the API response before retrying.');
+            }
             document.getElementById('generatedKey').textContent = generatedRawKey;
             document.getElementById('keyDisplayModal').classList.remove('hidden');
             closeModal();
@@ -381,7 +411,6 @@
         document.getElementById('createKeyModal').classList.remove('hidden');
     }
 
-    // Modern Revoke Logic using Modal
     function revokeKey(button) {
         const row = button.closest('tr');
         currentRevokeKeyId = row?.dataset.apiKeyId;
@@ -449,7 +478,7 @@
             }
 
             closePermanentDeleteModal();
-            if (typeof showToast === 'function') showToast('API key and associated usage history deleted permanently');
+            if (typeof showToast === 'function') showToast('API key and history deleted permanently');
             location.reload();
         } catch (error) {
             console.error(error);

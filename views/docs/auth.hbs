@@ -1,33 +1,33 @@
 <div>
-    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3">API Authentication Architecture</h1>
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-3">API Authentication</h1>
     <p class="text-slate-600 mb-8 leading-relaxed">
-        The gateway enforces system layer state requirements via unique API Keys passed dynamically over safe encrypted header fields. Request instances lacking valid properties drop prior to downstream proxy queues.
+        Every AI endpoint requires an active API key. Send the key in the <code>X-API-Key</code> request header over HTTPS. Keys are managed from the developer portal and are only shown in full immediately after creation.
     </p>
 
     <h2 class="text-xl font-bold text-slate-900 mb-4">Provisioning Key Tokens</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
             <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">1</span>
-            <p class="text-sm text-slate-600">Enter your institutional developer identity path inside the <a href="/auth/central" class="underline font-medium" style="color: #111CA8;">Portal Link</a>.</p>
+            <p class="text-sm text-slate-600">Sign in through the <a href="/auth/central" class="underline font-medium" style="color: #111CA8;">developer portal</a>.</p>
         </div>
         <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
             <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">2</span>
-            <p class="text-sm text-slate-600">Route inside layout panels directly to the active <strong>API Configuration Key</strong> area.</p>
+            <p class="text-sm text-slate-600">Open <strong>API Keys</strong> and create a key for your application.</p>
         </div>
         <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
             <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">3</span>
-            <p class="text-sm text-slate-600">Execute <strong>"Generate New Structural Secret"</strong> and label its tracking profile name.</p>
+            <p class="text-sm text-slate-600">Choose a name, permissions, and optional per-key limits.</p>
         </div>
         <div class="border border-slate-200 rounded-xl p-4 flex gap-3">
             <span class="w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center text-white bg-slate-900">4</span>
-            <p class="text-sm text-slate-600 font-semibold text-slate-900">Store properties securely immediately. Strings mask permanently once closed.</p>
+            <p class="text-sm text-slate-600 font-semibold text-slate-900">Copy the generated key before closing. It cannot be retrieved later; create a replacement if it is lost.</p>
         </div>
     </div>
 
     <h2 class="text-xl font-bold text-slate-900 mb-3">Header Reference Schema</h2>
     <p class="text-sm text-slate-600 mb-4">Populate downstream operational request executions using standard key headers:</p>
     
-    <pre><code class="language-bash">curl -X POST https://api.yourdomain.com/api/chat \
+    <pre><code class="language-bash">curl -X POST https://aiservice.prabisha.com/chat \
   -H "X-API-Key: your-api-key-here" \
   -H "Content-Type: application/json" \
   -d '{
@@ -37,7 +37,7 @@
     <div class="border-l-4 p-4 my-6 rounded-r-xl bg-orange-50/60 border-orange-500">
         <p class="text-orange-950 text-sm leading-relaxed">
             <i class="fas fa-exclamation-triangle mr-2 text-orange-600"></i>
-            <strong>Infrastructure Warning:</strong> Do not leak tokens inside client-side client tracking state matrices or repository structures. Manage inputs via secure environmental processes.
+            <strong>Security:</strong> Do not expose secret API keys in browser code or commit them to source control. Call the gateway from a trusted server and store the key in a secret manager or environment variable.
         </p>
     </div>
 
@@ -53,19 +53,19 @@
             <tbody class="divide-y divide-slate-200 text-slate-600 bg-white">
                 <tr>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">CHAT</td>
-                    <td class="px-4 py-3">Grants access structural context vectors to <code>/api/chat</code> pathways.</td>
+                    <td class="px-4 py-3">Scope metadata is configurable in the portal. Endpoint authorization currently validates the key status; it does not enforce individual scope values.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">IMAGE</td>
-                    <td class="px-4 py-3">Grants image rasterization privileges inside processing endpoints.</td>
+                    <td class="px-4 py-3">Do not use scope metadata as a security boundary until endpoint-level scope enforcement is enabled.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">VIDEO</td>
-                    <td class="px-4 py-3">Enables asynchronous access limits targeting rendering processors.</td>
+                    <td class="px-4 py-3">Video generation is not currently enabled.</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-mono text-xs font-bold text-indigo-700">EMBEDDINGS</td>
-                    <td class="px-4 py-3">Grants deep token mathematical encoding access models.</td>
+                    <td class="px-4 py-3">Embedding requests require a valid active API key.</td>
                 </tr>
             </tbody>
         </table>

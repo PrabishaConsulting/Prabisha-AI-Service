@@ -1,0 +1,66 @@
+<div>
+    <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-orange-50 text-orange-800 border border-orange-200">Documents</span>
+    </div>
+    <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-4">PDF Document Parsing</h1>
+    <p class="text-slate-600 mb-6 leading-relaxed">Submit a PDF as multipart form data. The Gemini provider can interpret text and visual content; the endpoint returns Gemini's response as document text, along with chunk and usage metadata.</p>
+
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Endpoint</h2>
+    <div class="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3.5 mb-8 font-mono text-sm">
+        <span class="px-2.5 py-0.5 rounded text-xs font-extrabold text-white bg-emerald-600">POST</span>
+        <span class="text-slate-200">https://aiservice.prabisha.com/documents/parse</span>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Multipart Request</h2>
+    <p class="text-sm text-slate-600 mb-4">Use <code>file</code> as a file field. Do not manually set the multipart <code>Content-Type</code>; let the HTTP client add the boundary.</p>
+    <pre><code class="language-bash">curl -X POST https://aiservice.prabisha.com/documents/parse \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -F "file=@./report.pdf;type=application/pdf" \
+  -F "prompt=Summarize the document and identify its main sections"</code></pre>
+
+    <h2 class="text-xl font-bold text-slate-900 mt-8 mb-3">Form Fields</h2>
+    <div class="overflow-hidden border border-slate-200 rounded-xl mb-8">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50"><tr><th class="px-4 py-3 text-left">Field</th><th class="px-4 py-3 text-left">Type</th><th class="px-4 py-3 text-left">Details</th></tr></thead>
+            <tbody class="divide-y divide-slate-200 bg-white text-slate-600">
+                <tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">file</td><td class="px-4 py-3">File, required</td><td class="px-4 py-3">PDF file with MIME type <code>application/pdf</code>.</td></tr>
+                <tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">prompt</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Optional instruction. When omitted, requests complete document content.</td></tr>
+                <tr><td class="px-4 py-3 font-mono font-semibold text-slate-900">model</td><td class="px-4 py-3">string</td><td class="px-4 py-3">Optional enabled Gemini text model ID. The configured default is used when omitted.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-900 mb-3">Response</h2>
+    <pre><code class="language-json">{
+  "success": true,
+  "pages": [{ "page": 1, "content": "Model response text..." }],
+  "chunks": [{
+    "page": 0,
+    "content": "Model response text...",
+    "chunkIndex": 0,
+    "totalChunksOnPage": 1,
+    "totalPages": 1
+  }],
+  "fullText": "Model response text...",
+  "metadata": {
+    "pageCount": 1,
+    "wordCount": 3,
+    "extractedAt": "2026-10-01T12:00:00.000Z",
+    "fileType": "application/pdf",
+    "chunkCount": 1,
+    "extractionMethod": "gemini-interactions"
+  },
+  "model": "gemini-3.6-flash",
+  "providerName": "GEMINI",
+  "usage": {
+    "promptTokens": 100,
+    "completionTokens": 20,
+    "totalTokens": 120
+  },
+  "latency": 1200
+}</code></pre>
+
+    <div class="border-l-4 p-4 mt-6 rounded-r-xl bg-amber-50 border-amber-500">
+        <p class="text-amber-950 text-sm leading-relaxed"><strong>Note:</strong> Gemini's complete response is returned as a single page entry; chunking splits that text for downstream use. The model's response format follows your prompt.</p>
+    </div>
+</div>
